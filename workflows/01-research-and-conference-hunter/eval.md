@@ -1,22 +1,22 @@
 # Eval: Research and Conference Hunter
 
-**Status:** first run done 2026-10-29 with the free keyword screener. AI screener not yet evaluated (Gemini free-tier quota blocked it).
+**Status (2026-10-29):** seeded-pool test run twice (free keyword screener, then Groq AI screener), plus functional tests of the three input modes, a fresh-import test and the extraction step. All on one local n8n 2.45.6 instance. Terminology note: Runs 1 and 2 were executed before two fields were renamed. Then `seed_dois` was `my_dois`, `is_seed` was `in_my_list`, and the metrics `seeds_*` and `seed_recall_percent` were `my_list_*` and `my_list_kept_percent`. Same meaning.
 
 ## Success criterion
 Original (2026-10-17): rerun the ICWIHI 2025 SLR question and recover at least 80% of the 35 included papers.
 
-**Replaced 2026-10-29 (young master's decision): seeded-pool test.** Reason: the original target cannot be met by searching. Measured before replacing it:
+**Replaced 2026-10-29 (the author's decision): seeded-pool test.** Reason: the original target cannot be met by searching. Measured before replacing it:
 - Keyword search with the SLR's own search terms, 3 pages of 100 each, 2007 to 2025: 6 of the 35 papers retrieved (17%).
 - Citation snowballing, 1 hop, 5 random seeds, 200 trials: about 1 of the other 30. Only 4 citation links exist among the 35 papers, and only 7 of them link to another one. The 35 are a hand-picked multi-topic set, not a citation cluster.
 
 New criterion: mix the 35 papers into a pool of unrelated search results, run the screener, and report (a) **seed recall**: share of the 35 kept as include or maybe, target 80% or more, and (b) the share of the other papers rejected, so a screener that keeps everything cannot pass.
 
 ## Method
-1. Workflow `P1 Research and Conference Hunter (stage 1)`, switch `use_llm` in Run Inputs.
-2. `seed_dois` holds the 35 DOIs. One OpenAlex call fetches them first, so the paper cap cannot cut them.
+1. Workflow `P1 Research and Conference Hunter (stage 1)` (`workflow.json`), switch `use_llm` in Run Inputs.
+2. `my_dois` (then called `seed_dois`) holds the 35 DOIs. One OpenAlex call fetches them first, so the paper cap cannot cut them.
 3. `search_query` is run for 3 pages of 100 (300 papers), from 2007.
 4. DOIs are lowercased, duplicates removed on DOI, then each paper is screened on title and abstract against the written criteria (`inclusion_criteria`, `exclusion_criteria` in Run Inputs, taken from the ICWIHI 2025 paper).
-5. `PRISMA Counts` reports the numbers below. Paper decisions are in `Screening Result` (field `is_seed` marks the 35).
+5. `PRISMA Counts` reports the numbers below. Paper decisions are in `Screening Result` (field `in_my_list`, then `is_seed`, marks the 35).
 
 Inputs: query `mixed reality personal assistant social isolation`, from 2007, 3 pages, cap 400 papers. Screener: free keyword rule (include = mentions MR or AR and an assistant, companion, agent, avatar or chatbot word; maybe = mentions one of them; exclude = neither).
 
@@ -61,6 +61,17 @@ Reading this honestly:
 - Keyword Screen (Run 1) kept 26 of 35 only because it passes anything that mentions AR; it is not a better screener.
 
 Next test (not run): rewrite the inclusion criteria to match what the 35 actually have in common, then rerun. Recall measured that way tells how well a screener learns the real rule, but it is fitted to the same 35 papers, so it is a ceiling, not an independent score.
+
+## Functional tests of the final workflow (2026-10-29)
+These check that the workflow works, not how accurate it is. Counts are in `sample-output/`.
+
+| Test | Settings | Result |
+|---|---|---|
+| `search` mode | keyword screener, 1 page, cap 50 | Success. 100 papers identified, 50 screened (cap), 50 left over and counted. |
+| `my_papers` mode | Groq AI, 35 DOIs, cap 10 | Success. All 35 DOIs found in OpenAlex, 10 screened, 9 sent to the AI (1 had no abstract and became `maybe`), 9,582 tokens used. |
+| `both` mode | keyword screener, token budget 100,000 at 1,100 per paper | Success. 135 papers identified, 1 duplicate, 90 screened (budget cap), 44 left over. Your list: 26 of 35 kept (74%), same as Run 1. |
+| Fresh import | `workflow.json` imported as a new workflow, no credentials, quickstart settings | Success. 105 identified, 10 screened, 5 of 5 sample DOIs found. |
+| Extraction | `my_papers` mode, 10 papers, Groq AI | 9 clean rows, 1 flagged `extraction failed`. 12,374 tokens, 1,237 per paper. An earlier run crashed on a value outside the allowed list (`not stated` for study type); fixed by allowing `not_stated` and by turning an unreadable answer into a flagged row. |
 
 ## Limits of this test
 - One query, one run, one screener. The numbers can move with the query and the criteria wording.

@@ -1,0 +1,105 @@
+{
+  "note": "Screening Result rows of run 2 (my_papers mode, Groq AI screener). Paper titles and DOIs are public metadata. No abstracts.",
+  "rows": [
+    {
+      "doi_norm": "10.1016/j.pmedr.2018.10.003",
+      "title": "Associations between screen time and lower psychological well-being among children and adolescents: Evidence from a population-based study",
+      "publication_year": 2018,
+      "decision": "exclude",
+      "reason": "The study does not involve mixed reality or augmented reality personal assistants or agents.",
+      "criterion": "Technology focus",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1080/09523987.2014.889400",
+      "title": "Augmented Reality in education – cases, places and potentials",
+      "publication_year": 2014,
+      "decision": "exclude",
+      "reason": "The paper discusses AR for education without any personal assistant, companion, agent, or avatar.",
+      "criterion": "No personal assistant or agent",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1016/j.ssaho.2023.100532",
+      "title": "Analyzing augmented reality (AR) and virtual reality (VR) recent development in education",
+      "publication_year": 2023,
+      "decision": "exclude",
+      "reason": "The paper does not involve any personal assistant, companion, agent, or avatar in an MR/AR environment.",
+      "criterion": "No personal assistant/agent",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1145/2580723.2580730",
+      "title": "Security and privacy for augmented reality systems",
+      "publication_year": 2014,
+      "decision": "exclude",
+      "reason": "The paper does not involve a personal assistant, agent, or companion in an AR/MR environment.",
+      "criterion": "It has no personal assistant or agent inside an MR environment.",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1080/09540261.2020.1720623",
+      "title": "Social media use and depression in adolescents: a scoping review",
+      "publication_year": 2020,
+      "decision": "exclude",
+      "reason": "The paper does not involve mixed reality or augmented reality personal assistants, companions, agents, or avatars.",
+      "criterion": "technology focus",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1371/journal.pone.0216290",
+      "title": "Social interaction in augmented reality",
+      "publication_year": 2019,
+      "decision": "maybe",
+      "reason": "The abstract mentions AR agents and social interaction but does not clearly address user experience, empathy, cognitive load, or social isolation.",
+      "criterion": "user experience",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.3389/frvir.2021.786665",
+      "title": "Social Interaction With Agents and Avatars in Immersive Virtual Environments: A Survey",
+      "publication_year": 2022,
+      "decision": "exclude",
+      "reason": "The paper focuses on immersive virtual reality agents and avatars, not on mixed reality or augmented reality.",
+      "criterion": "focuses only on VR",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1080/02614367.2019.1604790",
+      "title": "Augmented Reality Smart Glasses (ARSG) visitor adoption in cultural tourism",
+      "publication_year": 2019,
+      "decision": "exclude",
+      "reason": "The study focuses on AR smart glasses for cultural tourism and does not involve a personal assistant, companion, agent, or avatar.",
+      "criterion": "No personal assistant or agent",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1080/09523987.2015.1125988",
+      "title": "The use of augmented reality games in education: a review of the literature",
+      "publication_year": 2015,
+      "decision": "exclude",
+      "reason": "The paper reviews AR games for education and does not involve a personal assistant, companion, agent, or avatar.",
+      "criterion": "No personal assistant or agent",
+      "in_my_list": true,
+      "engine": "ai"
+    },
+    {
+      "doi_norm": "10.1016/j.jretconser.2023.103382",
+      "title": "Avatar-mediated experience in the metaverse: The impact of avatar realism on user-avatar relationship",
+      "publication_year": 2023,
+      "decision": "maybe",
+      "reason": "No abstract available: needs a human look (not sent to the AI, saves tokens).",
+      "criterion": "missing abstract",
+      "in_my_list": true,
+      "engine": "keyword"
+    }
+  ]
+}

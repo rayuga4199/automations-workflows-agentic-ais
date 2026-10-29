@@ -1,0 +1,76 @@
+{
+  "note": "PRISMA Counts output of three real runs on 2026-10-29 (local n8n 2.45.6). Counts only, no paper text.",
+  "runs": [
+    {
+      "label": "search mode, keyword screener (no AI)",
+      "mode": "search",
+      "screener": "keyword",
+      "max_pages": 1,
+      "max_papers": 50,
+      "result": {
+        "identified": 100,
+        "duplicates_removed": 0,
+        "not_screened_over_budget": 50,
+        "screened": 50,
+        "included": 4,
+        "maybe": 25,
+        "excluded": 21,
+        "sent_to_ai": 0,
+        "est_tokens_used": 0,
+        "my_list_requested": 35,
+        "my_list_found_in_openalex": 1,
+        "my_list_kept": 0,
+        "my_list_rejected": 1,
+        "my_list_kept_percent": 0,
+        "other_papers_rejected_percent": 41
+      }
+    },
+    {
+      "label": "my_papers mode, Groq AI screener, capped at 10 papers",
+      "mode": "my_papers",
+      "screener": "groq openai/gpt-oss-120b",
+      "max_papers": 10,
+      "result": {
+        "identified": 35,
+        "duplicates_removed": 0,
+        "not_screened_over_budget": 25,
+        "screened": 10,
+        "included": 0,
+        "maybe": 2,
+        "excluded": 8,
+        "sent_to_ai": 9,
+        "est_tokens_used": 10800,
+        "my_list_requested": 35,
+        "my_list_found_in_openalex": 35,
+        "my_list_kept": 2,
+        "my_list_rejected": 8,
+        "my_list_kept_percent": 20,
+        "other_papers_rejected_percent": 0
+      }
+    },
+    {
+      "label": "both mode, keyword screener, token budget cap",
+      "mode": "both",
+      "screener": "keyword",
+      "token_budget": 100000,
+      "tokens_per_paper": 1100,
+      "result": {
+        "identified": 135,
+        "duplicates_removed": 1,
+        "not_screened_over_budget": 44,
+        "screened": 90,
+        "included": 9,
+        "maybe": 47,
+        "excluded": 34,
+        "sent_to_ai": 0,
+        "est_tokens_used": 0,
+        "my_list_requested": 35,
+        "my_list_found_in_openalex": 36,
+        "my_list_kept": 26,
+        "my_list_rejected": 9,
+        "my_list_kept_percent": 74,
+        "other_papers_rejected_percent": 45
+      }
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "note": "Extraction Table of a real run (my_papers mode, 10 papers, Groq AI). Facts come from abstracts only; check before use. One row failed to parse and is flagged.",
+  "rows": [
+    {
+      "doi_norm": "10.1016/j.pmedr.2018.10.003",
+      "title": "Associations between screen time and lower psychological well-being among children and adolescents: Evidence from a population-based study",
+      "decision": "exclude",
+      "study_type": "survey",
+      "technology": "cell phones, computers, electronic games, and TV",
+      "participants": "U.S. children and adolescents aged 2–17 years, n=40,337",
+      "outcomes": "psychological well‑being (curiosity, self‑control, distractibility, social, emotional stability, care difficulty, task completion)",
+      "main_finding": "Higher screen time associated with lower well‑being; 7+ h/day users twice as likely depressed"
+    },
+    {
+      "doi_norm": "10.1080/09523987.2014.889400",
+      "title": "Augmented Reality in education – cases, places and potentials",
+      "decision": "maybe",
+      "study_type": "extraction failed",
+      "technology": "",
+      "participants": "",
+      "outcomes": "",
+      "main_finding": "AI answer could not be read: fill this by hand"
+    },
+    {
+      "doi_norm": "10.1016/j.ssaho.2023.100532",
+      "title": "Analyzing augmented reality (AR) and virtual reality (VR) recent development in education",
+      "decision": "maybe",
+      "study_type": "systematic_review",
+      "technology": "AR and VR",
+      "participants": "not stated",
+      "outcomes": "text mining of 1536 articles reveals trends, applications, advantages, future directions",
+      "main_finding": "Adoption of AR and VR in education is growing exponentially"
+    },
+    {
+      "doi_norm": "10.1145/2580723.2580730",
+      "title": "Security and privacy for augmented reality systems",
+      "decision": "maybe",
+      "study_type": "not_stated",
+      "technology": "augmented reality systems",
+      "participants": "not stated",
+      "outcomes": "not stated",
+      "main_finding": "Potential security concerns need addressing before widespread adoption."
+    },
+    {
+      "doi_norm": "10.1080/09540261.2020.1720623",
+      "title": "Social media use and depression in adolescents: a scoping review",
+      "decision": "exclude",
+      "study_type": "systematic_review",
+      "technology": "social media (social networking sites)",
+      "participants": "adolescents",
+      "outcomes": "depression and suicidality",
+      "main_finding": "Four themes: quantity, quality, social aspects, disclosure of mental health symptoms"
+    },
+    {
+      "doi_norm": "10.1371/journal.pone.0216290",
+      "title": "Social interaction in augmented reality",
+      "decision": "include",
+      "study_type": "experiment",
+      "technology": "augmented reality headset",
+      "participants": "human participants (unspecified)",
+      "outcomes": "task performance and nonverbal behavior",
+      "main_finding": "Agents improve easy tasks, impair hard tasks; participants avoid sitting on agents and keep heads facing them."
+    },
+    {
+      "doi_norm": "10.3389/frvir.2021.786665",
+      "title": "Social Interaction With Agents and Avatars in Immersive Virtual Environments: A Survey",
+      "decision": "maybe",
+      "study_type": "survey",
+      "technology": "immersive virtual reality",
+      "participants": "not stated",
+      "outcomes": "not stated",
+      "main_finding": "Factors affecting social interaction with virtual humans; further research needed"
+    },
+    {
+      "doi_norm": "10.1080/02614367.2019.1604790",
+      "title": "Augmented Reality Smart Glasses (ARSG) visitor adoption in cultural tourism",
+      "decision": "maybe",
+      "study_type": "qualitative",
+      "technology": "augmented reality smart glasses (ARSG)",
+      "participants": "28 visitors to a UK art gallery",
+      "outcomes": "ARSG adoption framework integrating societal impact, benefits, innovation attributes, resistance",
+      "main_finding": "adoption influenced by societal impact, perceived benefits, innovation attributes, visitor resistance"
+    },
+    {
+      "doi_norm": "10.1080/09523987.2015.1125988",
+      "title": "The use of augmented reality games in education: a review of the literature",
+      "decision": "include",
+      "study_type": "systematic_review",
+      "technology": "mobile phones, tablets, personal digital assistants",
+      "participants": "primary and secondary education students",
+      "outcomes": "positive effects on student learning",
+      "main_finding": "augmented reality games improve learning in natural sciences informal settings"
+    },
+    {
+      "doi_norm": "10.1145/3290605.3300511",
+      "title": "Exploring Virtual Agents for Augmented Reality",
+      "decision": "include",
+      "study_type": "experiment",
+      "technology": "Microsoft HoloLens AR headset",
+      "participants": "24 adult participants",
+      "outcomes": "Preference for miniature embodied agent; novelty and lower uncanniness",
+      "main_finding": "Agent representation influences user preference; miniature embodiment preferred"
+    }
+  ]
+}

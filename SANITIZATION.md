@@ -45,3 +45,4 @@ Exit code 0 means no leaks. Non-zero means a finding: rotate the secret first, t
 | Date | Command | Result |
 |---|---|---|
 | 2026-10-29 | `gitleaks dir --redact .` before first commit | no leaks found |
+| 2026-10-29 | `gitleaks dir --redact .` after docs rewrite, samples and re-export | see commit log |

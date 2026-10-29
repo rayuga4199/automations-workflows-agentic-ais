@@ -1,0 +1,20 @@
+{
+  "note": "Output of the shipped workflow.json after a fresh import with no credentials (quickstart settings, 2026-10-29). Search results change over time, so counts drift.",
+  "prisma_counts": {
+    "identified": 105,
+    "duplicates_removed": 0,
+    "not_screened_over_budget": 95,
+    "screened": 10,
+    "included": 2,
+    "maybe": 5,
+    "excluded": 3,
+    "sent_to_ai": 0,
+    "est_tokens_used": 0,
+    "my_list_requested": 5,
+    "my_list_found_in_openalex": 5,
+    "my_list_kept": 4,
+    "my_list_rejected": 1,
+    "my_list_kept_percent": 80,
+    "other_papers_rejected_percent": 40
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "_note": "Settings used for the ICWIHI 2025 systematic literature review evaluation (see eval.md). my_dois holds the 35 papers included in that review. Paste values into the Run Inputs node. use_llm true needs a Groq credential.",
+  "run_inputs": {
+    "research_question": "What does the literature from 2007 to 2024 say about mixed reality (MR) and augmented reality personal assistants and companions: their design, usability and psychological effects, specifically user experience and engagement, empathy, cognitive load and social isolation among young adults?",
+    "search_query": "mixed reality personal assistant social isolation",
+    "from_year": 2007,
+    "max_pages": 3,
+    "max_papers": 50,
+    "inclusion_criteria": "Include a paper if ALL apply:\n1. Published 2007 to 2024 and written in English.\n2. It studies mixed reality (MR) or augmented reality (AR) personal assistants, companions, agents or avatars.\n3. It looks at user experience, empathy-driven interaction, cognitive load or social isolation.\n4. It is an experimental study (user trials, empirical data) or a systematic review.",
+    "exclusion_criteria": "Exclude a paper if ANY apply:\n1. It focuses only on VR or on non-MR technology.\n2. It has no personal assistant or agent inside an MR environment.\n3. It has too little empirical evidence: purely theoretical, with no practical application or case study.",
+    "use_llm": true,
+    "my_dois": "10.1007/s11042-024-19191-y|10.1016/j.apergo.2024.104360|10.1016/j.caeo.2021.100036|10.1016/j.chbr.2024.100404|10.1016/j.jretconser.2023.103382|10.1016/j.pmedr.2018.10.003|10.1016/j.ssaho.2023.100532|10.1038/s41598-023-46494-1|10.1080/0144929x.2016.1208774|10.1080/0144929x.2019.1660805|10.1080/01691864.2021.1976670|10.1080/02614367.2019.1604790|10.1080/0951192x.2013.874589|10.1080/09523987.2014.889400|10.1080/09523987.2015.1125988|10.1080/09540261.2020.1720623|10.1080/13467581.2022.2097241|10.1080/13603116.2021.1916106|10.1109/vr.2007.352497|10.1109/vrw62533.2024.00261|10.1145/2580723.2580730|10.1145/3290605.3300511|10.1177/20552076221132099|10.1186/s12888-022-03889-0|10.1371/journal.pone.0216290|10.1371/journal.pone.0288175|10.17645/mac.v11i4.7016|10.2147/jpr.s400955|10.2196/29164|10.2196/42117|10.3389/fcomp.2022.1034307|10.3389/frvir.2021.786665|10.3390/jpm13010112|10.3390/s21072312|10.5772/intechopen.1003060",
+    "mode": "both",
+    "max_abstract_chars": 1000,
+    "token_budget": 100000,
+    "tokens_per_paper": 1100,
+    "skip_first": 0,
+    "keywords_a": "mixed reality|augmented reality",
+    "keywords_b": "assistant|companion|agent|avatar|chatbot|conversational",
+    "extract": false,
+    "extract_scope": "my_list",
+    "extract_budget": 30000,
+    "tokens_per_extraction": 1250
+  }
+}

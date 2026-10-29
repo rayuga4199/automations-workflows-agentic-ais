@@ -1,0 +1,25 @@
+{
+  "_note": "Quickstart: needs no API key. 5 DOIs from your own list plus 1 page of search results, free keyword screener, no AI. This is also what workflow.json ships with.",
+  "run_inputs": {
+    "research_question": "What does the literature from 2007 to 2024 say about mixed reality (MR) and augmented reality personal assistants and companions: their design, usability and psychological effects, specifically user experience and engagement, empathy, cognitive load and social isolation among young adults?",
+    "search_query": "mixed reality personal assistant social isolation",
+    "from_year": 2015,
+    "max_pages": 1,
+    "max_papers": 10,
+    "inclusion_criteria": "Include a paper if ALL apply:\n1. Published 2007 to 2024 and written in English.\n2. It studies mixed reality (MR) or augmented reality (AR) personal assistants, companions, agents or avatars.\n3. It looks at user experience, empathy-driven interaction, cognitive load or social isolation.\n4. It is an experimental study (user trials, empirical data) or a systematic review.",
+    "exclusion_criteria": "Exclude a paper if ANY apply:\n1. It focuses only on VR or on non-MR technology.\n2. It has no personal assistant or agent inside an MR environment.\n3. It has too little empirical evidence: purely theoretical, with no practical application or case study.",
+    "use_llm": false,
+    "my_dois": "10.1145/3290605.3300511|10.1109/vr.2007.352497|10.1080/0144929x.2019.1660805|10.3389/frvir.2021.786665|10.2196/29164",
+    "mode": "both",
+    "max_abstract_chars": 1000,
+    "token_budget": 100000,
+    "tokens_per_paper": 1100,
+    "skip_first": 0,
+    "keywords_a": "mixed reality|augmented reality",
+    "keywords_b": "assistant|companion|agent|avatar|chatbot|conversational",
+    "extract": false,
+    "extract_scope": "my_list",
+    "extract_budget": 30000,
+    "tokens_per_extraction": 1250
+  }
+}

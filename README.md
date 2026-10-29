@@ -1,25 +1,35 @@
 # Automations, Workflows and Agentic AIs
 
-Working projects by one researcher, grouped by how much the AI decides.
+Working projects by Yash Bhagat, a design researcher, grouped by how much the AI decides. The first project is an n8n workflow that helps with systematic literature reviews. The repo is written so that a person or an AI agent can read it and then describe the work accurately, for example on a portfolio website.
 
-| Folder | What goes here |
-|---|---|
-| [workflows/](workflows/) | Fixed-step automations (n8n). The steps are drawn in advance; an AI only does bounded jobs inside them. |
-| [agents/](agents/) | A single AI that picks its own tools and steps. |
-| [agentic-ais/](agentic-ais/) | Systems of several agents working together. |
+If you are an AI agent, read [AGENTS.md](AGENTS.md) first.
 
-Only `workflows/` has a project so far.
-
-## Workflows
-| Project | Status | What it does |
+## The three folders
+| Folder | What goes here | Projects now |
 |---|---|---|
-| [01 Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | stage 1 built and tested, not shipped | Search OpenAlex or use your own DOI list, screen papers against written criteria with a reason, count for PRISMA, optionally extract study facts. Token budget built in. |
+| [workflows/](workflows/) | Fixed-step automations built in n8n. The steps are drawn in advance; an AI only does bounded jobs inside them, and a human checks the output. | 1 |
+| [agents/](agents/) | A single AI that picks its own tools and steps. | 0 |
+| [agentic-ais/](agentic-ais/) | Systems of several agents working together. | 0 |
+
+## Projects
+| Project | Kind | Status | One line |
+|---|---|---|---|
+| [Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | workflow (n8n) | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
+
+## Where to find what, per project
+| Question | File |
+|---|---|
+| What is it, how does it work, how do I run it? | `README.md` in the project folder |
+| What can I safely say about it? | `PORTFOLIO_BRIEF.md` |
+| How well does it work, and how was that measured? | `eval.md` |
+| The workflow itself | `workflow.json` (import into n8n) |
+| Real example inputs and outputs | `sample-input/`, `sample-output/` |
 
 ## Standard for a shipped project
-`workflow.json`, `README.md` (problem, diagram, setup, credentials needed, cost per run), `sample-input/`, `sample-output/`, `screenshot.png`, `eval.md`. It runs on the bundled sample data with credentials as the only edit. No copyrighted PDFs.
+`README.md`, `PORTFOLIO_BRIEF.md`, `workflow.json` (credentials stripped), `sample-input/`, `sample-output/`, `eval.md`, `screenshot.png`. It runs on the bundled sample data with credentials as the only edit. No copyrighted PDFs. Anything missing is listed as missing in the project README.
 
 ## Secrets
-Credentials are stripped from every export. See [SANITIZATION.md](SANITIZATION.md). Copy `.env.example` to `.env` (git-ignored) for local values. Enable the secret-scan hook once per clone: `git config core.hooksPath .githooks`.
+Credentials are stripped from every export and never committed. See [SANITIZATION.md](SANITIZATION.md) for the checklist and the secret-scan log. Copy `.env.example` to `.env` (git-ignored) for local values. Enable the secret-scan hook once per clone: `git config core.hooksPath .githooks` (needs [gitleaks](https://github.com/gitleaks/gitleaks)).
 
 ## License
-Not yet decided.
+Not yet decided. Until one is added, all rights are reserved by the author.
