@@ -1,0 +1,31 @@
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+*.credentials.json
+
+# n8n local state
+.n8n/
+database.sqlite
+*.sqlite
+n8n-data/
+
+# Copyrighted PDFs stay out. Open-access samples go in sample-input/open-access/ after checking the license.
+*.pdf
+!**/sample-input/open-access/*.pdf
+
+# Participant data and raw recordings: anonymize first, then add the anonymized copy deliberately
+**/raw/
+*.wav
+*.mp3
+*.m4a
+
+# Tooling and OS noise
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+gitleaks-report.*

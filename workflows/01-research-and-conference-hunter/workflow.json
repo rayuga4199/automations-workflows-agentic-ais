@@ -1,0 +1,1835 @@
+{
+  "name": "P1 Research and Conference Hunter (stage 1)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "573f0f38-6a75-4e88-b54f-7424d1b5bd4c",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        928,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "research_question",
+              "type": "string",
+              "value": "What does the literature from 2007 to 2024 say about mixed reality (MR) and augmented reality personal assistants and companions: their design, usability and psychological effects, specifically user experience and engagement, empathy, cognitive load and social isolation among young adults?"
+            },
+            {
+              "id": "a2",
+              "name": "search_query",
+              "type": "string",
+              "value": "mixed reality personal assistant social isolation"
+            },
+            {
+              "id": "a3",
+              "name": "from_year",
+              "type": "number",
+              "value": 2007
+            },
+            {
+              "id": "a4",
+              "name": "max_pages",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "a5",
+              "name": "max_papers",
+              "type": "number",
+              "value": 50
+            },
+            {
+              "id": "a6",
+              "name": "inclusion_criteria",
+              "type": "string",
+              "value": "Include a paper if ALL apply:\n1. Published 2007 to 2024 and written in English.\n2. It studies mixed reality (MR) or augmented reality (AR) personal assistants, companions, agents or avatars.\n3. It looks at user experience, empathy-driven interaction, cognitive load or social isolation.\n4. It is an experimental study (user trials, empirical data) or a systematic review."
+            },
+            {
+              "id": "a7",
+              "name": "exclusion_criteria",
+              "type": "string",
+              "value": "Exclude a paper if ANY apply:\n1. It focuses only on VR or on non-MR technology.\n2. It has no personal assistant or agent inside an MR environment.\n3. It has too little empirical evidence: purely theoretical, with no practical application or case study."
+            },
+            {
+              "id": "a8",
+              "name": "use_llm",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "a9",
+              "name": "my_dois",
+              "type": "string",
+              "value": "10.1007/s11042-024-19191-y|10.1016/j.apergo.2024.104360|10.1016/j.caeo.2021.100036|10.1016/j.chbr.2024.100404|10.1016/j.jretconser.2023.103382|10.1016/j.pmedr.2018.10.003|10.1016/j.ssaho.2023.100532|10.1038/s41598-023-46494-1|10.1080/0144929x.2016.1208774|10.1080/0144929x.2019.1660805|10.1080/01691864.2021.1976670|10.1080/02614367.2019.1604790|10.1080/0951192x.2013.874589|10.1080/09523987.2014.889400|10.1080/09523987.2015.1125988|10.1080/09540261.2020.1720623|10.1080/13467581.2022.2097241|10.1080/13603116.2021.1916106|10.1109/vr.2007.352497|10.1109/vrw62533.2024.00261|10.1145/2580723.2580730|10.1145/3290605.3300511|10.1177/20552076221132099|10.1186/s12888-022-03889-0|10.1371/journal.pone.0216290|10.1371/journal.pone.0288175|10.17645/mac.v11i4.7016|10.2147/jpr.s400955|10.2196/29164|10.2196/42117|10.3389/fcomp.2022.1034307|10.3389/frvir.2021.786665|10.3390/jpm13010112|10.3390/s21072312|10.5772/intechopen.1003060"
+            },
+            {
+              "id": "a10",
+              "name": "mode",
+              "type": "string",
+              "value": "both"
+            },
+            {
+              "id": "a11",
+              "name": "max_abstract_chars",
+              "type": "number",
+              "value": 1000
+            },
+            {
+              "id": "a12",
+              "name": "token_budget",
+              "type": "number",
+              "value": 100000
+            },
+            {
+              "id": "a13",
+              "name": "tokens_per_paper",
+              "type": "number",
+              "value": 1100
+            },
+            {
+              "id": "a14",
+              "name": "skip_first",
+              "type": "number",
+              "value": 0
+            },
+            {
+              "id": "a15",
+              "name": "keywords_a",
+              "type": "string",
+              "value": "mixed reality|augmented reality"
+            },
+            {
+              "id": "a16",
+              "name": "keywords_b",
+              "type": "string",
+              "value": "assistant|companion|agent|avatar|chatbot|conversational"
+            },
+            {
+              "id": "a17",
+              "name": "extract",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "id": "a18",
+              "name": "extract_scope",
+              "type": "string",
+              "value": "my_list"
+            },
+            {
+              "id": "a19",
+              "name": "extract_budget",
+              "type": "number",
+              "value": 30000
+            },
+            {
+              "id": "a20",
+              "name": "tokens_per_extraction",
+              "type": "number",
+              "value": 1250
+            }
+          ]
+        }
+      },
+      "id": "e2391c50-6989-4af6-b07a-51f0f92e126a",
+      "name": "Run Inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1184,
+        112
+      ],
+      "notesInFlow": true,
+      "notes": "Edit these values before each run. Caps (max_pages, max_papers) bound the cost of a run."
+    },
+    {
+      "parameters": {
+        "url": "https://api.openalex.org/works",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "search",
+              "value": "={{ $json.search_query }}"
+            },
+            {
+              "name": "filter",
+              "value": "=from_publication_date:{{ $json.from_year }}-01-01"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "select",
+              "value": "id,doi,title,publication_year,abstract_inverted_index"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.results.length === 0 }}",
+              "limitPagesFetched": true,
+              "maxRequests": "={{ $(\"Run Inputs\").first().json.max_pages }}",
+              "requestInterval": 200
+            }
+          }
+        }
+      },
+      "id": "a3ee8adf-5610-41ce-bb3e-c238436d1e9b",
+      "name": "Search OpenAlex",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1408,
+        112
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "notes": "Keyless OpenAlex works for basic paging (10 req/s). A free key raises limits; add it as a Query Auth credential if wanted."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      },
+      "id": "65d15ead-1c5d-4f73-a10a-1e5fa5651671",
+      "name": "Split Results",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        1632,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const out = $input.all().map(item => {\n  const inv = item.json.abstract_inverted_index || {};\n  const words = [];\n  for (const [word, positions] of Object.entries(inv)) {\n    for (const p of positions) {\n      words[p] = word;\n    }\n  }\n  const rest = { ...item.json };\n  delete rest.abstract_inverted_index;\n  return { json: { ...rest, abstract: words.join(' ') } };\n});\nreturn out;"
+      },
+      "id": "43142550-0898-4a0f-88b9-e0affeea9f7e",
+      "name": "Rebuild Abstract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        112
+      ],
+      "notesInFlow": true,
+      "notes": "Why Code: Edit Fields considered, but OpenAlex ships abstracts as an inverted index (word -> positions) and rebuilding the text needs a loop over words and positions"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "n1",
+              "name": "doi_norm",
+              "type": "string",
+              "value": "={{ ($json.doi || $json.id).toLowerCase().replace('https://doi.org/', '') }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "75f349b2-095b-4e53-9c84-031c59ee9f0d",
+      "name": "Normalize DOI",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2080,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "doi_norm",
+        "options": {}
+      },
+      "id": "c2aa6a43-0ba2-46ee-89c5-43c2161b263e",
+      "name": "Remove Duplicates",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        2304,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ Math.min($(\"Run Inputs\").first().json.max_papers, Math.floor($(\"Run Inputs\").first().json.token_budget / $(\"Run Inputs\").first().json.tokens_per_paper)) }}"
+      },
+      "id": "d1ec0a93-59d2-4809-868d-9d6559eb7034",
+      "name": "Limit Papers",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2528,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Title: {{ $json.title }}\nYear: {{ $json.publication_year }}\nAbstract: {{ ($json.abstract || '').substring(0, $(\"Run Inputs\").first().json.max_abstract_chars) }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You screen papers for a systematic literature review. Research question: {{ $(\"Run Inputs\").first().json.research_question }}\n\nInclusion criteria:\n{{ $(\"Run Inputs\").first().json.inclusion_criteria }}\n\nExclusion criteria:\n{{ $(\"Run Inputs\").first().json.exclusion_criteria }}\n\nDecide from the title and abstract only. Answer include, exclude or maybe. Use maybe when the abstract is missing or the criteria cannot be judged. In reason, give one sentence that names the deciding fact. In criterion, name the single criterion that decided it."
+            }
+          ]
+        },
+        "batching": {
+          "batchSize": 1,
+          "delayBetweenBatches": 0
+        }
+      },
+      "id": "b9768590-ee33-4b67-8e2b-9021eb310bc1",
+      "name": "Screen Paper",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1680,
+        80
+      ],
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "notes": "One call per paper, no memory, so papers cannot influence each other. Decides from title and abstract only.",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"decision\":{\"type\":\"string\",\"enum\":[\"include\",\"exclude\",\"maybe\"]},\"reason\":{\"type\":\"string\"},\"criterion\":{\"type\":\"string\"}},\"required\":[\"decision\",\"reason\",\"criterion\"]}"
+      },
+      "id": "b32ca5dc-ebb2-4891-8ed4-bb29d84e208a",
+      "name": "Screening Decision",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1824,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r1",
+              "name": "doi_norm",
+              "type": "string",
+              "value": "={{ $json.doi_norm }}"
+            },
+            {
+              "id": "r2",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "r3",
+              "name": "publication_year",
+              "type": "number",
+              "value": "={{ $json.publication_year }}"
+            },
+            {
+              "id": "r4",
+              "name": "decision",
+              "type": "string",
+              "value": "={{ $json.output.decision }}"
+            },
+            {
+              "id": "r5",
+              "name": "reason",
+              "type": "string",
+              "value": "={{ $json.output.reason }}"
+            },
+            {
+              "id": "r6",
+              "name": "criterion",
+              "type": "string",
+              "value": "={{ $json.output.criterion }}"
+            },
+            {
+              "id": "r7",
+              "name": "in_my_list",
+              "type": "boolean",
+              "value": "={{ $('Derive Settings').first().json.my_dois_clean.split('|').includes($json.doi_norm) }}"
+            },
+            {
+              "id": "r8",
+              "name": "engine",
+              "type": "string",
+              "value": "={{ $json.engine }}"
+            }
+          ]
+        }
+      },
+      "id": "1319f65c-e6aa-461e-b049-3b35919d36a0",
+      "name": "Screening Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2032,
+        80
+      ],
+      "notes": "The chain returns only its output, so paper fields are read back from Limit Papers by item pairing."
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "papers",
+        "options": {}
+      },
+      "id": "32873894-a211-4220-b8ee-e2590a4c67ed",
+      "name": "Collect Decisions",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2368,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "p1",
+              "name": "identified",
+              "type": "number",
+              "value": "={{ $(\"Merge Sources\").all().length }}"
+            },
+            {
+              "id": "p2",
+              "name": "duplicates_removed",
+              "type": "number",
+              "value": "={{ $(\"Merge Sources\").all().length - $(\"Remove Duplicates\").all().length }}"
+            },
+            {
+              "id": "p3",
+              "name": "not_screened_over_budget",
+              "type": "number",
+              "value": "={{ $(\"Skip Done\").all().length - $(\"Limit Papers\").all().length }}"
+            },
+            {
+              "id": "p4",
+              "name": "screened",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().length }}"
+            },
+            {
+              "id": "p5",
+              "name": "included",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.decision === \"include\").length }}"
+            },
+            {
+              "id": "p6",
+              "name": "maybe",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.decision === \"maybe\").length }}"
+            },
+            {
+              "id": "p7",
+              "name": "excluded",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.decision === \"exclude\").length }}"
+            },
+            {
+              "id": "p8",
+              "name": "sent_to_ai",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.engine === \"ai\").length }}"
+            },
+            {
+              "id": "p9",
+              "name": "est_tokens_used",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.engine === \"ai\").length * $(\"Run Inputs\").first().json.tokens_per_paper }}"
+            },
+            {
+              "id": "p10",
+              "name": "my_list_requested",
+              "type": "number",
+              "value": "={{ $(\"Derive Settings\").first().json.my_dois_clean.split(\"|\").filter(Boolean).length }}"
+            },
+            {
+              "id": "p11",
+              "name": "my_list_found_in_openalex",
+              "type": "number",
+              "value": "={{ $(\"Remove Duplicates\").all().filter(i => $(\"Derive Settings\").first().json.my_dois_clean.split(\"|\").includes(i.json.doi_norm)).length }}"
+            },
+            {
+              "id": "p12",
+              "name": "my_list_kept",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.in_my_list && i.json.decision !== \"exclude\").length }}"
+            },
+            {
+              "id": "p13",
+              "name": "my_list_rejected",
+              "type": "number",
+              "value": "={{ $(\"Screening Result\").all().filter(i => i.json.in_my_list && i.json.decision === \"exclude\").length }}"
+            },
+            {
+              "id": "p14",
+              "name": "my_list_kept_percent",
+              "type": "number",
+              "value": "={{ Math.round(100 * $(\"Screening Result\").all().filter(i => i.json.in_my_list && i.json.decision !== \"exclude\").length / Math.max(1, $(\"Screening Result\").all().filter(i => i.json.in_my_list).length)) }}"
+            },
+            {
+              "id": "p15",
+              "name": "other_papers_rejected_percent",
+              "type": "number",
+              "value": "={{ Math.round(100 * $(\"Screening Result\").all().filter(i => !i.json.in_my_list && i.json.decision === \"exclude\").length / Math.max(1, $(\"Screening Result\").all().filter(i => !i.json.in_my_list).length)) }}"
+            }
+          ]
+        }
+      },
+      "id": "048dfe89-f8c2-488d-be09-c9ea06a9ffac",
+      "name": "PRISMA Counts",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2592,
+        112
+      ],
+      "notesInFlow": true,
+      "notes": "Counts for the PRISMA flow: identified, duplicates removed, screened, then include / maybe / exclude."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "include",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3deefc20-789e-4f6a-9883-5c27b15588fb",
+      "name": "Included Papers",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        2304,
+        320
+      ],
+      "notesInFlow": true,
+      "notes": "Papers the model would include. A human reviews this list before anything is pushed to Zotero (stage 2)."
+    },
+    {
+      "parameters": {
+        "content": "## START HERE: what is this?\nThis is a **robot helper that finds science papers**.\n\nYou tell it what you are looking for. It searches a big library on the internet, throws away copies, and asks an AI to read each paper and answer **YES, NO or MAYBE**. At the end it counts the papers.\n\n### How to use it\n1. Click the first box, called **Run Inputs**.\n2. Change the words inside: your question, what to search for, and your rules for YES and NO. Replace every word that says TODO.\n3. Keep the small numbers at first (1 page, 5 papers). That makes a quick, free test.\n4. Click the orange **Execute workflow** button at the bottom.\n5. When it stops, click **PRISMA Counts** to see the numbers and **Included Papers** to see the YES list.\n\nGreen tick = it worked. Red box = a problem. Tell Neo the name of the red box.",
+        "height": 400,
+        "width": 1100,
+        "color": 4
+      },
+      "id": "a4cbef54-f237-4441-93e4-8b4eb1624e80",
+      "name": "Note Start Here",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Part 1: Find the papers\nThis part visits a big paper library on the internet (called OpenAlex) and gets a list of papers.\n- **Run Inputs**: the settings page. This is the only box you change.\n- **Search OpenAlex**: asks the library for papers.\n- **Split Results**: puts each paper on its own card.\n- **Rebuild Abstract**: the library sends the summary all scrambled. This fixes it into normal words.\n- **Normalize DOI**: tidies each paper's ID number (its DOI).\n- **Remove Duplicates**: throws away papers that show up twice.\n- **Limit Papers**: stops at the number you chose, so it never costs too much.",
+        "height": 330,
+        "width": 1480,
+        "color": 5
+      },
+      "id": "c1941278-de5f-42cf-b237-8a9523c9eea5",
+      "name": "Note Part 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        -432
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Part 2: The AI reads each paper\nThe AI reads **one paper at a time** and answers:\n- **YES** (include), **NO** (exclude) or **MAYBE**\n- one short reason why\n\nIt only follows the rules you wrote in Run Inputs.\n- **Screen Paper**: asks the AI.\n- **Gemini Chat Model**: the AI brain (Google Gemini).\n- **Screening Decision**: makes sure the answer is neat.\n- **Screening Result**: writes the answer next to the paper's name.",
+        "height": 330,
+        "width": 600,
+        "color": 6
+      },
+      "id": "9f939e27-e0fe-4900-aa83-6793a4a67d45",
+      "name": "Note Part 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        -448
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Part 3: Count the papers\nCounts how many papers were found, how many were copies, and how many got YES, NO and MAYBE.\n\nClick **PRISMA Counts** after a run to see the six numbers.",
+        "height": 330,
+        "width": 460,
+        "color": 3
+      },
+      "id": "6887b5d6-13e2-477b-b34c-9b3cbeb936e6",
+      "name": "Note Part 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3504,
+        -416
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## The YES list\n**Included Papers** keeps only the YES papers.\n\nA person (you!) must check this list before anything is saved anywhere. The AI is a helper, not the boss.",
+        "height": 230,
+        "width": 460,
+        "color": 7
+      },
+      "id": "ea66694d-2fd0-4fa9-8cee-5c19b82d759e",
+      "name": "Note YES List",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2352,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $(\"Run Inputs\").first().json.use_llm && ($json.abstract || '').length >= 40 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "17426028-abfc-4ca8-8b0d-65fdcc621692",
+      "name": "Use LLM?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1792,
+        -64
+      ],
+      "notes": "Switch in Run Inputs: use_llm true sends papers to the AI, false uses the free keyword screener."
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "k1",
+              "name": "output.decision",
+              "type": "string",
+              "value": "={{ ($json.abstract || '').length < 40 ? 'maybe' : ((new RegExp($('Run Inputs').first().json.keywords_a, 'i').test($json.title + ' ' + $json.abstract) && new RegExp($('Run Inputs').first().json.keywords_b, 'i').test($json.title + ' ' + $json.abstract)) ? 'include' : ((new RegExp($('Run Inputs').first().json.keywords_a, 'i').test($json.title + ' ' + $json.abstract) || new RegExp($('Run Inputs').first().json.keywords_b, 'i').test($json.title + ' ' + $json.abstract)) ? 'maybe' : 'exclude')) }}"
+            },
+            {
+              "id": "k2",
+              "name": "output.reason",
+              "type": "string",
+              "value": "={{ ($json.abstract || '').length < 40 ? 'No abstract available: needs a human look (not sent to the AI, saves tokens).' : 'Keyword rule on title and abstract (no AI).' }}"
+            },
+            {
+              "id": "k3",
+              "name": "output.criterion",
+              "type": "string",
+              "value": "={{ ($json.abstract || '').length < 40 ? 'missing abstract' : 'keywords_a and keywords_b in Run Inputs' }}"
+            },
+            {
+              "id": "k4",
+              "name": "engine",
+              "type": "string",
+              "value": "keyword"
+            }
+          ]
+        }
+      },
+      "id": "f44b2324-0f83-4aa0-b4b4-8b938f5ea933",
+      "name": "Keyword Screen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2016,
+        560
+      ],
+      "notes": "Free screener, no AI. include = mentions MR/AR AND an assistant/companion/agent/avatar word. maybe = mentions one of them. exclude = neither. Crude on purpose: a baseline to compare the AI against."
+    },
+    {
+      "id": "e6527f96-6f17-45ba-b41a-016acb9c3b1c",
+      "name": "Fetch Seed Papers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        336
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.openalex.org/works",
+        "authentication": "none",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filter",
+              "value": "={{ 'doi:' + $json.doi_chunks }}"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "select",
+              "value": "id,doi,title,publication_year,abstract_inverted_index"
+            }
+          ]
+        }
+      },
+      "notes": "Seeded-pool test: fetches the papers listed in seed_dois (Run Inputs) in one OpenAlex call. Leave seed_dois empty for a normal run.",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "8f45c711-eb7a-48c2-ab68-2595026b06c9",
+      "name": "Split Seeds",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        336
+      ],
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "include": "noOtherFields"
+      }
+    },
+    {
+      "id": "1e321eb1-a6db-4da8-8e08-8519f9fe3e55",
+      "name": "Merge Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        780,
+        224
+      ],
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 2
+      },
+      "notes": "Seed papers go in first so the paper cap can never cut them. Then the search results."
+    },
+    {
+      "id": "acd85091-35bf-40e8-9d10-8eb9d24a8e42",
+      "name": "Groq Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        336
+      ],
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0,
+          "maxTokensToSample": 1500
+        }
+      },
+      "credentials": {
+        "groqApi": {
+          "name": "Groq account (replace with yours)"
+        }
+      }
+    },
+    {
+      "id": "5a63401c-2b18-4066-859d-55281bf52aa5",
+      "name": "Screen Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2016,
+        -60
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "notes": "Takes one paper at a time so the Wait node can pace the AI calls (Groq free tier: 8,000 tokens per minute)."
+    },
+    {
+      "id": "f3811eb0-444b-4246-a6a5-53fc4aec198c",
+      "name": "Attach Paper",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2400,
+        112
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t1",
+              "name": "doi_norm",
+              "type": "string",
+              "value": "={{ $('Screen Loop').first().json.doi_norm }}"
+            },
+            {
+              "id": "t2",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $('Screen Loop').first().json.title }}"
+            },
+            {
+              "id": "t3",
+              "name": "publication_year",
+              "type": "number",
+              "value": "={{ $('Screen Loop').first().json.publication_year }}"
+            },
+            {
+              "id": "t4",
+              "name": "output.decision",
+              "type": "string",
+              "value": "={{ $json.output?.decision || 'maybe' }}"
+            },
+            {
+              "id": "t5",
+              "name": "output.reason",
+              "type": "string",
+              "value": "={{ $json.output?.reason || 'AI answer could not be read: needs a human look.' }}"
+            },
+            {
+              "id": "t6",
+              "name": "output.criterion",
+              "type": "string",
+              "value": "={{ $json.output?.criterion || 'AI answer unreadable' }}"
+            },
+            {
+              "id": "t7",
+              "name": "engine",
+              "type": "string",
+              "value": "ai"
+            }
+          ]
+        }
+      },
+      "notes": "The AI node returns only its answer. This puts the paper's DOI, title and year back next to it."
+    },
+    {
+      "id": "e0f811e4-33b5-487f-bf78-49c324731712",
+      "name": "Pace Calls",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2624,
+        112
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 12,
+        "unit": "seconds"
+      },
+      "notes": "Waits 12 seconds between papers so the free AI limit is not hit."
+    },
+    {
+      "id": "c954f4c8-9b53-4e75-bc17-a250dbacaa0b",
+      "name": "Derive Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1408,
+        0
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": true,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d1",
+              "name": "my_dois_clean",
+              "type": "string",
+              "value": "={{ ($json.my_dois || '').toLowerCase().replace(/https?:\\/\\/(dx\\.)?doi\\.org\\//g, '').split(/[\\s,;|]+/).filter(d => d.length > 5).join('|') }}"
+            },
+            {
+              "id": "d2",
+              "name": "search_on",
+              "type": "boolean",
+              "value": "={{ $json.mode !== 'my_papers' && ($json.search_query || '').trim().length > 0 }}"
+            },
+            {
+              "id": "d3",
+              "name": "list_on",
+              "type": "boolean",
+              "value": "={{ $json.mode !== 'search' && ($json.my_dois || '').trim().length > 5 }}"
+            }
+          ]
+        }
+      },
+      "notes": "Cleans the DOI list (any mix of new lines, commas, spaces, | and https://doi.org/ prefixes) and decides which input paths run: search, your list, or both."
+    },
+    {
+      "id": "0ef26e29-4314-4607-b0d3-7bdf33a7d761",
+      "name": "Search On?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1632,
+        -80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "s1",
+              "leftValue": "={{ $json.search_on }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "notes": "Path 1: runs only when mode is search or both, and a search query is filled in."
+    },
+    {
+      "id": "62e5d1e3-cd7d-48e5-88af-fc7564c1e16a",
+      "name": "List On?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1632,
+        160
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "l1",
+              "leftValue": "={{ $json.list_on }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "notes": "Path 2: runs only when mode is my_papers or both, and the my_dois list is filled in."
+    },
+    {
+      "id": "493fa65f-2fe7-45ad-903c-e378dcce293d",
+      "name": "Chunk DOIs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1856,
+        160
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "doi_chunks",
+              "type": "array",
+              "value": "={{ $json.my_dois_clean.split('|').chunk(50).map(c => c.join('|')) }}"
+            }
+          ]
+        }
+      },
+      "notes": "Cuts your DOI list into groups of 50 so a long list still works (OpenAlex answers up to 100 papers per call)."
+    },
+    {
+      "id": "da25220f-6a2a-4ea5-9673-816e6a820f6c",
+      "name": "Split Chunks",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        160
+      ],
+      "parameters": {
+        "fieldToSplitOut": "doi_chunks",
+        "include": "noOtherFields",
+        "options": {}
+      }
+    },
+    {
+      "id": "bf6aedf0-ad7e-4f05-bbef-db19c6fb8d8c",
+      "name": "Skip Done",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        2400,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1",
+              "leftValue": "={{ $itemIndex }}",
+              "rightValue": "={{ $(\"Run Inputs\").first().json.skip_first }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "notes": "To continue a big list: set skip_first to the number of papers already screened. 0 = start from the first paper."
+    },
+    {
+      "id": "1c2dec48-e7cf-423b-be5d-cefdd00cfd69",
+      "name": "Combine Decisions",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2400,
+        300
+      ],
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 2
+      },
+      "notes": "Joins the AI answers and the keyword answers into one list."
+    },
+    {
+      "id": "06e17337-5123-43ac-8bcd-9b6f8ac58327",
+      "name": "Extract Gate",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        2300,
+        820
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "g1",
+              "leftValue": "={{ $('Run Inputs').first().json.extract === true && ($('Limit Papers').all().find(p => p.json.doi_norm === $json.doi_norm)?.json.abstract || '').length >= 40 && ($json.decision !== 'exclude' || ($('Run Inputs').first().json.extract_scope === 'my_list' && $json.in_my_list)) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "notes": "Lets a paper through only if extract is on, the paper has an abstract, and it is in scope: extract_scope my_list = every paper from your own list; anything else = papers the screener kept (include or maybe)."
+    },
+    {
+      "id": "dd1c015c-3f62-4c04-95d4-20fb062bf6b2",
+      "name": "Cap Extraction",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2520,
+        820
+      ],
+      "parameters": {
+        "maxItems": "={{ Math.floor($('Run Inputs').first().json.extract_budget / $('Run Inputs').first().json.tokens_per_extraction) }}"
+      },
+      "notes": "Token cap for step 4: at most extract_budget divided by tokens_per_extraction papers."
+    },
+    {
+      "id": "68d6de14-91a9-4759-ab2e-03d057dd9ddc",
+      "name": "Extract Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2740,
+        820
+      ],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "notes": "One paper at a time so the Wait node can pace the AI."
+    },
+    {
+      "id": "dfc92f1f-2047-4c74-b6b4-43b83f0c3296",
+      "name": "Extract Info",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        2960,
+        840
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ 'Title: ' + $json.title + '\\nYear: ' + $json.publication_year + '\\nAbstract: ' + ($('Limit Papers').all().find(p => p.json.doi_norm === $json.doi_norm)?.json.abstract || '').substring(0, $('Run Inputs').first().json.max_abstract_chars) }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Extract facts from the title and abstract only, for a literature review table. If a fact is not stated in the abstract, write 'not stated'. Never guess and never add information that is not in the text. Keep each field under 20 words. study_type is one of: experiment, survey, systematic_review, qualitative, theoretical, other, not_stated (use not_stated when the abstract does not say)."
+            }
+          ]
+        },
+        "batching": {
+          "batchSize": 1,
+          "delayBetweenBatches": 0
+        }
+      },
+      "notes": "Reads the abstract and fills 5 facts. If a fact is not written there it says 'not stated' and does not guess.",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "bb568445-04a1-4d0b-b181-ecd9962e7721",
+      "name": "Groq Extract Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        1060
+      ],
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0,
+          "maxTokensToSample": 1200
+        }
+      },
+      "credentials": {
+        "groqApi": {
+          "name": "Groq account (replace with yours)"
+        }
+      }
+    },
+    {
+      "id": "c90b0872-4f7a-4840-a5c6-b8f072771ac1",
+      "name": "Extraction Fields",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3140,
+        1060
+      ],
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"study_type\":{\"type\":\"string\",\"enum\":[\"experiment\",\"survey\",\"systematic_review\",\"qualitative\",\"theoretical\",\"other\",\"not_stated\"]},\"technology\":{\"type\":\"string\"},\"participants\":{\"type\":\"string\"},\"outcomes\":{\"type\":\"string\"},\"main_finding\":{\"type\":\"string\"}},\"required\":[\"study_type\",\"technology\",\"participants\",\"outcomes\",\"main_finding\"]}"
+      }
+    },
+    {
+      "id": "c7dea0b1-f7ae-44e9-9242-008e1b71460b",
+      "name": "Attach Extraction",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        3200,
+        820
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "x1",
+              "name": "doi_norm",
+              "type": "string",
+              "value": "={{ $('Extract Loop').first().json.doi_norm }}"
+            },
+            {
+              "id": "x2",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $('Extract Loop').first().json.title }}"
+            },
+            {
+              "id": "x3",
+              "name": "decision",
+              "type": "string",
+              "value": "={{ $('Extract Loop').first().json.decision }}"
+            },
+            {
+              "id": "x4",
+              "name": "study_type",
+              "type": "string",
+              "value": "={{ $json.output?.study_type || 'extraction failed' }}"
+            },
+            {
+              "id": "x5",
+              "name": "technology",
+              "type": "string",
+              "value": "={{ $json.output?.technology || '' }}"
+            },
+            {
+              "id": "x6",
+              "name": "participants",
+              "type": "string",
+              "value": "={{ $json.output?.participants || '' }}"
+            },
+            {
+              "id": "x7",
+              "name": "outcomes",
+              "type": "string",
+              "value": "={{ $json.output?.outcomes || '' }}"
+            },
+            {
+              "id": "x8",
+              "name": "main_finding",
+              "type": "string",
+              "value": "={{ $json.output?.main_finding || 'AI answer could not be read: fill this by hand' }}"
+            }
+          ]
+        }
+      },
+      "notes": "Puts the paper's DOI, title and screening answer back next to the 5 extracted facts."
+    },
+    {
+      "id": "599f2dac-6582-4119-a85b-a8a0de0c8864",
+      "name": "Pace Extract",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3420,
+        820
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 12,
+        "unit": "seconds"
+      },
+      "notes": "Waits 12 seconds between papers so the free AI limit is not hit."
+    },
+    {
+      "id": "39b29485-2b2c-41b6-884f-911012a8a0f9",
+      "name": "Extraction Table",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        640
+      ],
+      "parameters": {},
+      "notes": "The result: one row per paper with study type, technology, participants, outcomes and main finding. Check it before you trust it."
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Run Inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search OpenAlex": {
+      "main": [
+        [
+          {
+            "node": "Split Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rebuild Abstract": {
+      "main": [
+        [
+          {
+            "node": "Normalize DOI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize DOI": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Screening Decision": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Screen Paper",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Screening Result": {
+      "main": [
+        [
+          {
+            "node": "Collect Decisions",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Included Papers",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Decisions": {
+      "main": [
+        [
+          {
+            "node": "PRISMA Counts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit Papers": {
+      "main": [
+        [
+          {
+            "node": "Use LLM?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use LLM?": {
+      "main": [
+        [
+          {
+            "node": "Screen Loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Keyword Screen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Seed Papers": {
+      "main": [
+        [
+          {
+            "node": "Split Seeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Seeds": {
+      "main": [
+        [
+          {
+            "node": "Merge Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Results": {
+      "main": [
+        [
+          {
+            "node": "Merge Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Sources": {
+      "main": [
+        [
+          {
+            "node": "Rebuild Abstract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Screen Paper",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Screen Loop": {
+      "main": [
+        [
+          {
+            "node": "Combine Decisions",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Screen Paper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Screen Paper": {
+      "main": [
+        [
+          {
+            "node": "Attach Paper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Paper": {
+      "main": [
+        [
+          {
+            "node": "Pace Calls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace Calls": {
+      "main": [
+        [
+          {
+            "node": "Screen Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Inputs": {
+      "main": [
+        [
+          {
+            "node": "Derive Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Derive Settings": {
+      "main": [
+        [
+          {
+            "node": "Search On?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "List On?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search On?": {
+      "main": [
+        [
+          {
+            "node": "Search OpenAlex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List On?": {
+      "main": [
+        [
+          {
+            "node": "Chunk DOIs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk DOIs": {
+      "main": [
+        [
+          {
+            "node": "Split Chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Chunks": {
+      "main": [
+        [
+          {
+            "node": "Fetch Seed Papers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Skip Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Skip Done": {
+      "main": [
+        [
+          {
+            "node": "Limit Papers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keyword Screen": {
+      "main": [
+        [
+          {
+            "node": "Combine Decisions",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combine Decisions": {
+      "main": [
+        [
+          {
+            "node": "Screening Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Gate": {
+      "main": [
+        [
+          {
+            "node": "Cap Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cap Extraction": {
+      "main": [
+        [
+          {
+            "node": "Extract Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Loop": {
+      "main": [
+        [
+          {
+            "node": "Extraction Table",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Info": {
+      "main": [
+        [
+          {
+            "node": "Attach Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Extraction": {
+      "main": [
+        [
+          {
+            "node": "Pace Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace Extract": {
+      "main": [
+        [
+          {
+            "node": "Extract Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Extract Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Info",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction Fields": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Extract Info",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [
+    {
+      "id": "e3421018-719b-4517-b685-2bfaad33fb81",
+      "name": "1 Get the papers",
+      "nodeIds": [
+        "e2391c50-6989-4af6-b07a-51f0f92e126a",
+        "c954f4c8-9b53-4e75-bc17-a250dbacaa0b",
+        "0ef26e29-4314-4607-b0d3-7bdf33a7d761",
+        "62e5d1e3-cd7d-48e5-88af-fc7564c1e16a",
+        "a3ee8adf-5610-41ce-bb3e-c238436d1e9b",
+        "65d15ead-1c5d-4f73-a10a-1e5fa5651671",
+        "493fa65f-2fe7-45ad-903c-e378dcce293d",
+        "da25220f-6a2a-4ea5-9673-816e6a820f6c",
+        "e6527f96-6f17-45ba-b41a-016acb9c3b1c",
+        "8f45c711-eb7a-48c2-ab68-2595026b06c9",
+        "1e321eb1-a6db-4da8-8e08-8519f9fe3e55",
+        "43142550-0898-4a0f-88b9-e0affeea9f7e",
+        "75f349b2-095b-4e53-9c84-031c59ee9f0d",
+        "c2aa6a43-0ba2-46ee-89c5-43c2161b263e",
+        "bf6aedf0-ad7e-4f05-bbef-db19c6fb8d8c",
+        "d1ec0a93-59d2-4809-868d-9d6559eb7034"
+      ],
+      "description": "Search, your own DOI list, or both. Clean, dedupe, cap by token budget."
+    },
+    {
+      "id": "72ff79c7-8dd3-4797-827b-35c02bbdf1c0",
+      "name": "2 Screen the papers",
+      "nodeIds": [
+        "17426028-abfc-4ca8-8b0d-65fdcc621692",
+        "5a63401c-2b18-4066-859d-55281bf52aa5",
+        "b9768590-ee33-4b67-8e2b-9021eb310bc1",
+        "acd85091-35bf-40e8-9d10-8eb9d24a8e42",
+        "b32ca5dc-ebb2-4891-8ed4-bb29d84e208a",
+        "f3811eb0-444b-4246-a6a5-53fc4aec198c",
+        "e0f811e4-33b5-487f-bf78-49c324731712",
+        "f44b2324-0f83-4aa0-b4b4-8b938f5ea933",
+        "1c2dec48-e7cf-423b-be5d-cefdd00cfd69",
+        "1319f65c-e6aa-461e-b049-3b35919d36a0"
+      ],
+      "description": "AI (Groq, paced) or free keyword screener. Papers without an abstract skip the AI."
+    },
+    {
+      "id": "953d9c31-d099-4294-80c9-34b492b1f3f5",
+      "name": "3 PRISMA counts",
+      "nodeIds": [
+        "32873894-a211-4220-b8ee-e2590a4c67ed",
+        "048dfe89-f8c2-488d-be09-c9ea06a9ffac"
+      ],
+      "description": "Counts for the PRISMA flow, plus token estimate."
+    },
+    {
+      "id": "82a3bebd-de90-41a7-aec5-62373ff4938a",
+      "name": "4 Extract the facts",
+      "nodeIds": [
+        "06e17337-5123-43ac-8bcd-9b6f8ac58327",
+        "dd1c015c-3f62-4c04-95d4-20fb062bf6b2",
+        "68d6de14-91a9-4759-ab2e-03d057dd9ddc",
+        "dfc92f1f-2047-4c74-b6b4-43b83f0c3296",
+        "bb568445-04a1-4d0b-b181-ecd9962e7721",
+        "c90b0872-4f7a-4840-a5c6-b8f072771ac1",
+        "c7dea0b1-f7ae-44e9-9242-008e1b71460b",
+        "599f2dac-6582-4119-a85b-a8a0de0c8864",
+        "39b29485-2b2c-41b6-884f-911012a8a0f9"
+      ],
+      "description": "Optional. Groq reads each abstract and fills study type, technology, participants, outcomes, main finding. Capped by extract_budget."
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "saveManualExecutions": true
+  },
+  "meta": {}
+}
