@@ -7,14 +7,19 @@ If you are an AI agent, read [AGENTS.md](AGENTS.md) first.
 ## The three folders
 | Folder | What goes here | Projects now |
 |---|---|---|
-| [workflows/](workflows/) | Fixed-step automations built in n8n. The steps are drawn in advance; an AI only does bounded jobs inside them, and a human checks the output. | 1 |
-| [agents/](agents/) | A single AI that picks its own tools and steps. | 0 |
-| [agentic-ais/](agentic-ais/) | Systems of several agents working together. | 0 |
+| [workflows/](workflows/) | Fixed-step automations built in n8n. The steps are drawn in advance; an AI only does bounded jobs inside them, and a human checks the output. | 2 built |
+| [agents/](agents/) | A single AI that picks its own tools and steps. | 0 built, 1 planned |
+| [agentic-ais/](agentic-ais/) | Systems of several agents working together. | 0 built, 1 planned |
 
 ## Projects
-| Project | Kind | Status | One line |
-|---|---|---|---|
-| [Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | workflow (n8n) | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
+Four projects, built in this order. The first two exist. Do not describe a planned project as working.
+
+| # | Project | Kind | Status | One line |
+|---|---|---|---|---|
+| 1 | [Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | workflow (n8n) | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
+| 2 | [Insight Synthesis Engine](workflows/02-insight-synthesis-engine/) | workflow (n8n) | Prototype. Built and stress tested on small synthetic samples. Not tested at scale or on real interview data. | A one-page form takes interview transcripts, pasted text and web links, hides listed names, sorts the text into themes and writes insights with the exact quotes behind them. |
+| 3 | Research Writer | agent (n8n) | Planned, not built. | One agent for research and writing. It searches papers, keeps a quote ledger, flags uncited claims and suggests rewording of the researcher's own sentences. It never writes content for him and never invents a reference. |
+| 4 | Design Team | agentic AI (n8n) | Planned, not built. | A lead agent coordinates a research agent, a product agent, a design agent and a standby developer agent to turn a brief into a researched, prioritised design and, if needed, a code scaffold. A human approves at two points. |
 
 ## Where to find what, per project
 | Question | File |

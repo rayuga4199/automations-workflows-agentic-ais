@@ -1,0 +1,3 @@
+Navigation aids in mixed reality fail when they compete for attention. Designers keep adding overlays, but pedestrians need a calm view of the real street. A good companion speaks rarely, shows the next step only, and owns its mistakes. Trust is built less by accuracy than by honest uncertainty. Wearing a heavy headset in public also carries a social cost, because people react to what they cannot see.
+---
+In the pilot, two of three participants returned to arrows after the voice mode misheard place names. Observers saw frequent glances at the floor and at phones. One participant stopped mid-corridor to dismiss a notification.

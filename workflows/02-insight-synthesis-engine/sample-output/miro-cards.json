@@ -1,0 +1,72 @@
+[
+  {
+    "title": "Honest uncertainty builds trust",
+    "text": "Users report higher trust when the navigation companion admits uncertainty or owns its mistakes, while repeated errors or lack of honest cues reduce trust.",
+    "tags": [
+      "transcript",
+      "text"
+    ],
+    "evidence": [
+      "T2: Honestly I only trust the companion when it admits it is unsure. It once said it could not find the lab and asked me to look for a sign, and that made me trust it more.",
+      "N1: A good companion speaks rarely, shows the next step only, and owns its mistakes. Trust is built less by accuracy than by honest uncertainty.",
+      "T3: But when it gave me the wrong turn twice I stopped believing it. I wish I could switch off the chatter in quiet places like the reading room."
+    ],
+    "needs_review": false
+  },
+  {
+    "title": "Cognitive load from visual and auditory clutter",
+    "text": "Frequent visual overlays and excessive voice instructions distract users, causing them to look away, stop listening, or dismiss the companion.",
+    "tags": [
+      "text",
+      "transcript"
+    ],
+    "evidence": [
+      "N1: Navigation aids in mixed reality fail when they compete for attention. Designers keep adding overlays, but pedestrians need a calm view of the real street.",
+      "T1: The first time [participant] showed me the companion, it talked too much and I stopped listening.",
+      "T2: Too many pop-ups pull my attention away from the corridor and I nearly walked into a glass door.",
+      "N2: One participant stopped mid-corridor to dismiss a notification."
+    ],
+    "needs_review": false
+  },
+  {
+    "title": "Social visibility and physical discomfort",
+    "text": "Wearing a heavy mixed‑reality headset in public makes users feel self‑conscious because people stare, and it can cause physical discomfort such as dizziness.",
+    "tags": [
+      "transcript",
+      "text"
+    ],
+    "evidence": [
+      "T3: [participant] from my hostel said the glasses made him dizzy. People stare when I speak to it, so I mostly use the arrows.",
+      "N1: Wearing a heavy headset in public also carries a social cost, because people react to what they cannot see.",
+      "T2: I would feel silly talking to a companion in front of other people. At home it feels fine, in a crowded lobby it does not."
+    ],
+    "needs_review": false
+  },
+  {
+    "title": "Modality preference and readability",
+    "text": "Participants prefer glanceable arrow cues over voice instructions, and they experience visual fatigue from small text and physical fatigue from wearing the headset for extended periods.",
+    "tags": [
+      "transcript",
+      "text"
+    ],
+    "evidence": [
+      "T1: I wear the headset when I walk through a new campus building because the arrows on the floor save me from stopping every minute.",
+      "N2: In the pilot, two of three participants returned to arrows after the voice mode misheard place names. Observers saw frequent glances at the floor and at phones.",
+      "T2: [participant] told me that voice instructions work better for her, but I prefer arrows because I can glance at them. The device is heavy after twenty minutes.",
+      "T1: After a long walk my eyes get tired and the small text is hard to read."
+    ],
+    "needs_review": false
+  },
+  {
+    "title": "Companion as social anchor",
+    "text": "The navigation companion reduces feelings of isolation by greeting users by name and offering a sense of companionship during exploration.",
+    "tags": [
+      "transcript"
+    ],
+    "evidence": [
+      "T3: As a new student I felt isolated in the first week and the companion gave me a reason to explore. It remembered where the library was and greeted me by name, which felt friendly.",
+      "T1: Sometimes I forget I am alone in the corridor, and that feels good. My friend [participant] asked me to write to [email] or call [phone] if I want to try it again."
+    ],
+    "needs_review": true
+  }
+]

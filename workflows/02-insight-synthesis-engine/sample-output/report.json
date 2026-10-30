@@ -1,0 +1,338 @@
+{
+  "summary": {
+    "sources_requested": 7,
+    "sources_with_text": 6,
+    "sources_fetch_failed": 1,
+    "links_skipped": 1,
+    "chunks_available": 88,
+    "chunks_used": 40,
+    "chunks_placed_in_a_theme": 17,
+    "chunks_in_no_theme": 23,
+    "ai_batches": 5,
+    "ai_batches_failed": 0,
+    "themes": 5,
+    "themes_needing_review": 1,
+    "redactions_made": 6,
+    "ai_calls": 11,
+    "est_tokens": 14892
+  },
+  "warnings": [
+    "Could not read 1 link(s): https://en.wikipedia.org/wiki/This_page_does_not_exist_zzz_12345",
+    "1 line(s) under Web links did not start with http and were skipped.",
+    "Only 40 of 88 text pieces were analysed, to stay inside the token budget."
+  ],
+  "themes": [
+    {
+      "theme_id": "T1",
+      "theme": "Honest uncertainty builds trust",
+      "description": "Users trust the companion more when it admits uncertainty or acknowledges mistakes, rather than presenting only correct answers.",
+      "insight": "Users report higher trust when the navigation companion admits uncertainty or owns its mistakes, while repeated errors or lack of honest cues reduce trust.",
+      "caveat": "The evidence comes from a limited number of interview transcripts, so it may not represent broader user populations.",
+      "chunk_count": 4,
+      "source_mix": {
+        "T2": 1,
+        "T3": 1,
+        "N1": 1,
+        "T1": 1
+      },
+      "source_types": {
+        "transcript": 3,
+        "text": 1
+      },
+      "triangulated": true,
+      "quotes": [
+        {
+          "chunk_id": "T2-1",
+          "source_id": "T2",
+          "source_type": "transcript",
+          "title": "Transcript 2",
+          "url": "",
+          "text": "Honestly I only trust the companion when it admits it is unsure. It once said it could not find the lab and asked me to look for a sign, and that made me trust it more."
+        },
+        {
+          "chunk_id": "N1-2",
+          "source_id": "N1",
+          "source_type": "text",
+          "title": "Text 1",
+          "url": "",
+          "text": "A good companion speaks rarely, shows the next step only, and owns its mistakes. Trust is built less by accuracy than by honest uncertainty."
+        },
+        {
+          "chunk_id": "T3-2",
+          "source_id": "T3",
+          "source_type": "transcript",
+          "title": "Transcript 3",
+          "url": "",
+          "text": "But when it gave me the wrong turn twice I stopped believing it. I wish I could switch off the chatter in quiet places like the reading room."
+        }
+      ],
+      "needs_review": false,
+      "flags": []
+    },
+    {
+      "theme_id": "T2",
+      "theme": "Cognitive load from visual and auditory clutter",
+      "description": "Frequent overlays, pop‑ups, and misheard voice instructions distract users and cause them to look away or revert to simpler cues.",
+      "insight": "Frequent visual overlays and excessive voice instructions distract users, causing them to look away, stop listening, or dismiss the companion.",
+      "caveat": "The evidence comes only from a small number of self‑reported experiences and does not include objective measures of cognitive load.",
+      "chunk_count": 4,
+      "source_mix": {
+        "N1": 1,
+        "T1": 1,
+        "T2": 1,
+        "N2": 1
+      },
+      "source_types": {
+        "text": 2,
+        "transcript": 2
+      },
+      "triangulated": true,
+      "quotes": [
+        {
+          "chunk_id": "N1-1",
+          "source_id": "N1",
+          "source_type": "text",
+          "title": "Text 1",
+          "url": "",
+          "text": "Navigation aids in mixed reality fail when they compete for attention. Designers keep adding overlays, but pedestrians need a calm view of the real street."
+        },
+        {
+          "chunk_id": "T1-2",
+          "source_id": "T1",
+          "source_type": "transcript",
+          "title": "Transcript 1",
+          "url": "",
+          "text": "The first time [participant] showed me the companion, it talked too much and I stopped listening."
+        },
+        {
+          "chunk_id": "T2-2",
+          "source_id": "T2",
+          "source_type": "transcript",
+          "title": "Transcript 2",
+          "url": "",
+          "text": "Too many pop-ups pull my attention away from the corridor and I nearly walked into a glass door."
+        },
+        {
+          "chunk_id": "N2-2",
+          "source_id": "N2",
+          "source_type": "text",
+          "title": "Text 2",
+          "url": "",
+          "text": "One participant stopped mid-corridor to dismiss a notification."
+        }
+      ],
+      "needs_review": false,
+      "flags": []
+    },
+    {
+      "theme_id": "T3",
+      "theme": "Social visibility and physical discomfort",
+      "description": "Wearing a heavy headset in public draws attention, makes users feel self‑conscious, and can cause physical discomfort such as dizziness.",
+      "insight": "Wearing a heavy mixed‑reality headset in public makes users feel self‑conscious because people stare, and it can cause physical discomfort such as dizziness.",
+      "caveat": "The evidence comes from a limited set of participant comments and cannot indicate how common these experiences are across a broader population.",
+      "chunk_count": 3,
+      "source_mix": {
+        "T3": 1,
+        "N1": 1,
+        "T2": 1
+      },
+      "source_types": {
+        "transcript": 2,
+        "text": 1
+      },
+      "triangulated": true,
+      "quotes": [
+        {
+          "chunk_id": "T3-3",
+          "source_id": "T3",
+          "source_type": "transcript",
+          "title": "Transcript 3",
+          "url": "",
+          "text": "[participant] from my hostel said the glasses made him dizzy. People stare when I speak to it, so I mostly use the arrows."
+        },
+        {
+          "chunk_id": "N1-3",
+          "source_id": "N1",
+          "source_type": "text",
+          "title": "Text 1",
+          "url": "",
+          "text": "Wearing a heavy headset in public also carries a social cost, because people react to what they cannot see."
+        },
+        {
+          "chunk_id": "T2-4",
+          "source_id": "T2",
+          "source_type": "transcript",
+          "title": "Transcript 2",
+          "url": "",
+          "text": "I would feel silly talking to a companion in front of other people. At home it feels fine, in a crowded lobby it does not."
+        }
+      ],
+      "needs_review": false,
+      "flags": []
+    },
+    {
+      "theme_id": "T4",
+      "theme": "Modality preference and readability",
+      "description": "Participants favor arrows they can glance at over voice instructions, and report fatigue from small text or prolonged headset use.",
+      "insight": "Participants prefer glanceable arrow cues over voice instructions, and they experience visual fatigue from small text and physical fatigue from wearing the headset for extended periods.",
+      "caveat": "The findings are based on a small pilot study with only a few participants, limiting generalizability.",
+      "chunk_count": 4,
+      "source_mix": {
+        "T1": 2,
+        "N2": 1,
+        "T2": 1
+      },
+      "source_types": {
+        "transcript": 3,
+        "text": 1
+      },
+      "triangulated": true,
+      "quotes": [
+        {
+          "chunk_id": "T1-1",
+          "source_id": "T1",
+          "source_type": "transcript",
+          "title": "Transcript 1",
+          "url": "",
+          "text": "I wear the headset when I walk through a new campus building because the arrows on the floor save me from stopping every minute."
+        },
+        {
+          "chunk_id": "N2-1",
+          "source_id": "N2",
+          "source_type": "text",
+          "title": "Text 2",
+          "url": "",
+          "text": "In the pilot, two of three participants returned to arrows after the voice mode misheard place names. Observers saw frequent glances at the floor and at phones."
+        },
+        {
+          "chunk_id": "T2-3",
+          "source_id": "T2",
+          "source_type": "transcript",
+          "title": "Transcript 2",
+          "url": "",
+          "text": "[participant] told me that voice instructions work better for her, but I prefer arrows because I can glance at them. The device is heavy after twenty minutes."
+        },
+        {
+          "chunk_id": "T1-5",
+          "source_id": "T1",
+          "source_type": "transcript",
+          "title": "Transcript 1",
+          "url": "",
+          "text": "After a long walk my eyes get tired and the small text is hard to read."
+        }
+      ],
+      "needs_review": false,
+      "flags": []
+    },
+    {
+      "theme_id": "T5",
+      "theme": "Companion as social anchor",
+      "description": "The navigation companion reduces feelings of isolation by greeting users by name and providing a sense of companionship during exploration.",
+      "insight": "The navigation companion reduces feelings of isolation by greeting users by name and offering a sense of companionship during exploration.",
+      "caveat": "The evidence is based only on a few transcript excerpts, so it may not represent broader user experiences.",
+      "chunk_count": 2,
+      "source_mix": {
+        "T3": 1,
+        "T1": 1
+      },
+      "source_types": {
+        "transcript": 2
+      },
+      "triangulated": false,
+      "quotes": [
+        {
+          "chunk_id": "T3-1",
+          "source_id": "T3",
+          "source_type": "transcript",
+          "title": "Transcript 3",
+          "url": "",
+          "text": "As a new student I felt isolated in the first week and the companion gave me a reason to explore. It remembered where the library was and greeted me by name, which felt friendly."
+        },
+        {
+          "chunk_id": "T1-4",
+          "source_id": "T1",
+          "source_type": "transcript",
+          "title": "Transcript 1",
+          "url": "",
+          "text": "Sometimes I forget I am alone in the corridor, and that feels good. My friend [participant] asked me to write to [email] or call [phone] if I want to try it again."
+        }
+      ],
+      "needs_review": true,
+      "flags": [
+        "only one type of source supports this"
+      ]
+    }
+  ],
+  "miro_cards": [
+    {
+      "title": "Honest uncertainty builds trust",
+      "text": "Users report higher trust when the navigation companion admits uncertainty or owns its mistakes, while repeated errors or lack of honest cues reduce trust.",
+      "tags": [
+        "transcript",
+        "text"
+      ],
+      "evidence": [
+        "T2: Honestly I only trust the companion when it admits it is unsure. It once said it could not find the lab and asked me to look for a sign, and that made me trust it more.",
+        "N1: A good companion speaks rarely, shows the next step only, and owns its mistakes. Trust is built less by accuracy than by honest uncertainty.",
+        "T3: But when it gave me the wrong turn twice I stopped believing it. I wish I could switch off the chatter in quiet places like the reading room."
+      ],
+      "needs_review": false
+    },
+    {
+      "title": "Cognitive load from visual and auditory clutter",
+      "text": "Frequent visual overlays and excessive voice instructions distract users, causing them to look away, stop listening, or dismiss the companion.",
+      "tags": [
+        "text",
+        "transcript"
+      ],
+      "evidence": [
+        "N1: Navigation aids in mixed reality fail when they compete for attention. Designers keep adding overlays, but pedestrians need a calm view of the real street.",
+        "T1: The first time [participant] showed me the companion, it talked too much and I stopped listening.",
+        "T2: Too many pop-ups pull my attention away from the corridor and I nearly walked into a glass door.",
+        "N2: One participant stopped mid-corridor to dismiss a notification."
+      ],
+      "needs_review": false
+    },
+    {
+      "title": "Social visibility and physical discomfort",
+      "text": "Wearing a heavy mixed‑reality headset in public makes users feel self‑conscious because people stare, and it can cause physical discomfort such as dizziness.",
+      "tags": [
+        "transcript",
+        "text"
+      ],
+      "evidence": [
+        "T3: [participant] from my hostel said the glasses made him dizzy. People stare when I speak to it, so I mostly use the arrows.",
+        "N1: Wearing a heavy headset in public also carries a social cost, because people react to what they cannot see.",
+        "T2: I would feel silly talking to a companion in front of other people. At home it feels fine, in a crowded lobby it does not."
+      ],
+      "needs_review": false
+    },
+    {
+      "title": "Modality preference and readability",
+      "text": "Participants prefer glanceable arrow cues over voice instructions, and they experience visual fatigue from small text and physical fatigue from wearing the headset for extended periods.",
+      "tags": [
+        "transcript",
+        "text"
+      ],
+      "evidence": [
+        "T1: I wear the headset when I walk through a new campus building because the arrows on the floor save me from stopping every minute.",
+        "N2: In the pilot, two of three participants returned to arrows after the voice mode misheard place names. Observers saw frequent glances at the floor and at phones.",
+        "T2: [participant] told me that voice instructions work better for her, but I prefer arrows because I can glance at them. The device is heavy after twenty minutes.",
+        "T1: After a long walk my eyes get tired and the small text is hard to read."
+      ],
+      "needs_review": false
+    },
+    {
+      "title": "Companion as social anchor",
+      "text": "The navigation companion reduces feelings of isolation by greeting users by name and offering a sense of companionship during exploration.",
+      "tags": [
+        "transcript"
+      ],
+      "evidence": [
+        "T3: As a new student I felt isolated in the first week and the companion gave me a reason to explore. It remembered where the library was and greeted me by name, which felt friendly.",
+        "T1: Sometimes I forget I am alone in the corridor, and that feels good. My friend [participant] asked me to write to [email] or call [phone] if I want to try it again."
+      ],
+      "needs_review": true
+    }
+  ]
+}

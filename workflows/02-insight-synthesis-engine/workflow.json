@@ -1,0 +1,1534 @@
+{
+  "name": "Insight Synthesis Engine",
+  "nodes": [
+    {
+      "id": "ff075def-128a-45a3-88a5-94f254d1dd32",
+      "name": "Run Inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "i1",
+              "name": "focus_question",
+              "type": "string",
+              "value": "={{ $json['Research question'] }}"
+            },
+            {
+              "id": "i2",
+              "name": "participant_names",
+              "type": "string",
+              "value": "={{ $json['Names to hide'] }}"
+            },
+            {
+              "id": "i3",
+              "name": "transcripts_text",
+              "type": "string",
+              "value": "={{ $json['Interview transcripts'] }}"
+            },
+            {
+              "id": "i4",
+              "name": "other_text",
+              "type": "string",
+              "value": "={{ $json['Other text'] }}"
+            },
+            {
+              "id": "i5",
+              "name": "links",
+              "type": "string",
+              "value": "={{ $json['Web links'] }}"
+            },
+            {
+              "id": "i6",
+              "name": "max_chunk_chars",
+              "type": "number",
+              "value": 180
+            },
+            {
+              "id": "i7",
+              "name": "max_chunks",
+              "type": "number",
+              "value": 40
+            },
+            {
+              "id": "i8",
+              "name": "max_themes",
+              "type": "number",
+              "value": 5
+            },
+            {
+              "id": "i9",
+              "name": "token_budget",
+              "type": "number",
+              "value": 20000
+            },
+            {
+              "id": "i10",
+              "name": "tokens_per_chunk",
+              "type": "number",
+              "value": 500
+            },
+            {
+              "id": "i11",
+              "name": "pace_seconds",
+              "type": "number",
+              "value": 25
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e3eb94c6-8920-4e70-a364-02b6efb1026f",
+      "name": "Split Sources",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        900,
+        0
+      ],
+      "parameters": {
+        "fieldToSplitOut": "sources",
+        "include": "noOtherFields"
+      }
+    },
+    {
+      "id": "fb52465d-a17c-48c0-954d-190719fb9a92",
+      "name": "Needs Fetch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ !!$json.url && !$json.text }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "68e70349-ca43-48a8-9190-9d430066806a",
+      "name": "Fetch Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1550,
+        -300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "InsightSynthesisEngine/0.1 (research prototype)"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "7dadde7e-9024-4221-bb13-28d6257f0b55",
+      "name": "Page To Text",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1850,
+        -300
+      ],
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "sourceData": "json",
+        "dataPropertyName": "data",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "text",
+              "cssSelector": "p",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true,
+          "cleanUpText": true
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "c8a23235-bdcd-4e64-9e6a-2c9829c3582e",
+      "name": "Attach Source Info",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2150,
+        -300
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "source_id",
+              "type": "string",
+              "value": "={{ $(\"Needs Fetch?\").item.json.source_id }}"
+            },
+            {
+              "id": "a2",
+              "name": "source_type",
+              "type": "string",
+              "value": "={{ $(\"Needs Fetch?\").item.json.source_type }}"
+            },
+            {
+              "id": "a3",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $(\"Needs Fetch?\").item.json.title }}"
+            },
+            {
+              "id": "a4",
+              "name": "url",
+              "type": "string",
+              "value": "={{ $(\"Needs Fetch?\").item.json.url }}"
+            },
+            {
+              "id": "a5",
+              "name": "text",
+              "type": "string",
+              "value": "={{ ($json.text || []).map(h => h.replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&amp;/g, '&')).join(' ') }}"
+            },
+            {
+              "id": "a6",
+              "name": "fetch_ok",
+              "type": "boolean",
+              "value": "={{ ($json.text || []).length > 0 }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2739947c-4768-482a-b92a-5c695d951f08",
+      "name": "All Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2500,
+        0
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "f13ed725-f596-44b0-a684-088c40b65974",
+      "name": "Anonymise",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2900,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const names = String($('Run Inputs').first().json.participant_names || '')\n  .split(',').map(s => s.trim()).filter(Boolean)\n  .sort((a, b) => b.length - a.length);\nconst emailRe = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+([.][A-Za-z0-9-]+)+/g;\nconst phoneRes = [/[+][0-9][0-9 -]{8,}[0-9]/g, /(?<![0-9])[0-9]{5}[ -][0-9]{5}(?![0-9])/g, /(?<![0-9])[0-9]{3}[ -][0-9]{3}[ -][0-9]{4}(?![0-9])/g];\nfunction isWord(ch) { return !!ch && /[\\p{L}\\p{M}\\p{N}]/u.test(ch); }\nfunction redactName(text, name) {\n  let low = text.toLowerCase();\n  let key = name.toLowerCase();\n  if (low.length !== text.length) { low = text; key = name; }\n  let out = '';\n  let i = 0;\n  let n = 0;\n  while (i < text.length) {\n    const j = low.indexOf(key, i);\n    if (j === -1) { out += text.slice(i); break; }\n    const before = j > 0 ? text[j - 1] : '';\n    const after = j + key.length < text.length ? text[j + key.length] : '';\n    if (!isWord(before) && !isWord(after)) { out += text.slice(i, j) + '[participant]'; n++; i = j + key.length; }\n    else { out += text.slice(i, j + 1); i = j + 1; }\n  }\n  return { text: out, n };\n}\nreturn $input.all().map(item => {\n  let t = String(item.json.text || '');\n  let n = 0;\n  t = t.replace(emailRe, () => { n++; return '[email]'; });\n  for (const re of phoneRes) { t = t.replace(re, () => { n++; return '[phone]'; }); }\n  for (const name of names) { const r = redactName(t, name); t = r.text; n += r.n; }\n  return { json: { ...item.json, text: t, redactions: n } };\n});"
+      }
+    },
+    {
+      "id": "8efb60b2-2eac-4694-b178-f320c0f80da6",
+      "name": "Chunk Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3200,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const cfg = $('Run Inputs').first().json;\nconst maxChars = Number(cfg.max_chunk_chars) || 180;\nconst cap = Math.min(Number(cfg.max_chunks) || 40, Math.floor(Number(cfg.token_budget) / Number(cfg.tokens_per_chunk)));\nfunction stripBrackets(s) {\n  let out = '';\n  let depth = 0;\n  for (const ch of s) {\n    if (ch === '[') { depth++; }\n    else if (ch === ']') { if (depth > 0) { depth--; } }\n    else if (depth === 0) { out += ch; }\n  }\n  return out;\n}\nfunction pieces(sentence) {\n  if (sentence.length <= maxChars) { return [sentence]; }\n  const out = [];\n  let cur = '';\n  for (const w of sentence.split(' ')) {\n    if (w.length > maxChars) {\n      if (cur) { out.push(cur); cur = ''; }\n      for (let k = 0; k < w.length; k += maxChars) { out.push(w.slice(k, k + maxChars)); }\n    } else if (cur && (cur.length + 1 + w.length) > maxChars) { out.push(cur); cur = w; }\n    else { cur = cur ? cur + ' ' + w : w; }\n  }\n  if (cur) { out.push(cur); }\n  return out;\n}\nconst perSource = [];\nfor (const item of $input.all()) {\n  const j = item.json;\n  const raw = j.url ? stripBrackets(String(j.text || '')) : String(j.text || '');\n  const text = raw.split('\\n').join(' ').replace(/ +/g, ' ').trim();\n  const sentences = text.split(/(?<=[.!?]) +|(?<=[。！？])/).map(x => x.trim()).filter(Boolean);\n  const chunks = [];\n  let cur = '';\n  for (const s of sentences) {\n    for (const p of pieces(s)) {\n      if (cur && (cur.length + 1 + p.length) > maxChars) { chunks.push(cur); cur = p; }\n      else { cur = cur ? cur + ' ' + p : p; }\n    }\n  }\n  if (cur) chunks.push(cur);\n  perSource.push(chunks.filter(c => c.length >= 30).map((c, i) => ({ chunk_id: j.source_id + '-' + (i + 1), source_id: j.source_id, source_type: j.source_type, title: j.title || '', url: j.url || '', text: c })));\n}\nconst out = [];\nlet round = 0;\nlet more = true;\nwhile (more && out.length < cap) {\n  more = false;\n  for (const list of perSource) {\n    if (round < list.length && out.length < cap) { out.push(list[round]); more = true; }\n  }\n  round++;\n}\nif (out.length === 0) { return [{ json: { no_text: true } }]; }\nconst available = perSource.reduce((a, l) => a + l.length, 0);\nreturn out.map(c => ({ json: { ...c, chunks_available: available } }));"
+      }
+    },
+    {
+      "id": "125f376c-3083-43d8-a205-67227f267b9e",
+      "name": "Collect Chunks",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4100,
+        300
+      ],
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "chunks",
+        "include": "allFields"
+      }
+    },
+    {
+      "id": "e3c2d30b-7f21-4c2f-b1ac-87fe991b0132",
+      "name": "Propose Themes",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        4400,
+        300
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chunks.slice(0, 30).map(c => c.chunk_id + \": \" + c.text).join(\"\\n\") }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a qualitative researcher. The user message lists text chunks from interviews, web pages and notes, each as chunk_id: text.\nPropose between 3 and {{ $(\"Run Inputs\").first().json.max_themes }} distinct themes that recur across the chunks. For each give theme_id (T1, T2, ...), a name of at most 6 words, and a one-sentence description. Use only what the chunks support. Do not invent themes.\nResearch focus: {{ $(\"Run Inputs\").first().json.focus_question }}"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "1b840052-0475-410b-bc8f-ec72ade4801a",
+      "name": "Groq Theme Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4300,
+        620
+      ],
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0,
+          "maxTokensToSample": 1500
+        }
+      },
+      "credentials": {
+        "groqApi": {
+          "name": "Groq account (replace with yours)"
+        }
+      }
+    },
+    {
+      "id": "21bf3684-1a85-4360-9769-bade96f52b83",
+      "name": "Theme Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4550,
+        620
+      ],
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"themes\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"theme_id\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"}},\"required\":[\"theme_id\",\"name\",\"description\"]}}},\"required\":[\"themes\"]}"
+      }
+    },
+    {
+      "id": "e80c08fe-a5f3-4b38-a93a-0fad28ec0c68",
+      "name": "Attach Themes",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5400,
+        0
+      ],
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll"
+      }
+    },
+    {
+      "id": "f9f5ec33-61b5-4dd6-abd0-25df2991b5df",
+      "name": "Split Assignments",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        7200,
+        0
+      ],
+      "parameters": {
+        "fieldToSplitOut": "assignments",
+        "include": "noOtherFields"
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "bdb3f1c3-859a-4dfb-94b3-9946f1f31be4",
+      "name": "Group By Theme",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7700,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const themes = $('Propose Themes').first().json.output?.themes || [];\nconst chunks = $('Chunk Text').all().map(i => i.json);\nconst byId = {};\nfor (const a of $input.all()) { if (a.json.chunk_id) { byId[a.json.chunk_id] = String(a.json.theme_id || '').trim(); } }\nconst buckets = {};\nfor (const t of themes) { buckets[t.theme_id] = { theme_id: t.theme_id, name: t.name, description: t.description, chunks: [] }; }\nfor (const c of chunks) {\n  const tid = byId[c.chunk_id];\n  if (tid && buckets[tid]) { buckets[tid].chunks.push(c); }\n}\nconst result = Object.values(buckets)\n  .filter(b => b.chunks.length > 0)\n  .map(b => ({ json: { ...b, chunk_count: b.chunks.length, prompt_chunks: b.chunks.slice(0, 8) } }));\nif (result.length === 0) { return [{ json: { no_placement: true } }]; }\nreturn result;"
+      }
+    },
+    {
+      "id": "5ddb578b-1bd4-416a-a4fe-5550fcba77da",
+      "name": "Build Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9600,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const cfg = $('Run Inputs').first().json;\nconst chunks = $('Chunk Text').all().map(i => i.json);\nconst byChunk = {};\nfor (const c of chunks) { byChunk[c.chunk_id] = c; }\nconst groups = $('Group By Theme').all().map(i => i.json);\nconst byTheme = {};\nfor (const g of groups) { byTheme[g.theme_id] = g; }\nconst themes = $input.all().map(i => i.json).map(r => {\n  const g = byTheme[r.theme_id] || { chunks: [], name: r.theme_id, description: '' };\n  const memberIds = new Set(g.chunks.map(c => c.chunk_id));\n  const asked = [...new Set(r.supporting_chunk_ids || [])];\n  const quoteIds = asked.filter(id => memberIds.has(id));\n  const quotes = quoteIds.map(id => ({ chunk_id: id, source_id: byChunk[id].source_id, source_type: byChunk[id].source_type, title: byChunk[id].title, url: byChunk[id].url, text: byChunk[id].text }));\n  const bySource = {};\n  const byType = {};\n  for (const c of g.chunks) {\n    bySource[c.source_id] = (bySource[c.source_id] || 0) + 1;\n    byType[c.source_type] = (byType[c.source_type] || 0) + 1;\n  }\n  const flags = [];\n  if (!r.ok) { flags.push('AI answer unreadable: write this insight by hand'); }\n  if (quotes.length === 0) { flags.push('no valid supporting quote'); }\n  if (asked.length > quoteIds.length) { flags.push((asked.length - quoteIds.length) + ' quote id(s) not in this theme were dropped'); }\n  if (Object.keys(byType).length < 2) { flags.push('only one type of source supports this'); }\n  return { theme_id: r.theme_id, theme: g.name, description: g.description, insight: r.insight, caveat: r.caveat, chunk_count: g.chunks.length, source_mix: bySource, source_types: byType, triangulated: Object.keys(byType).length >= 2, quotes, needs_review: flags.length > 0, flags };\n});\nconst sources = $('All Sources').all().map(i => i.json);\nconst placed = groups.reduce((a, g) => a + g.chunk_count, 0);\nconst redactions = $('Anonymise').all().reduce((a, i) => a + (i.json.redactions || 0), 0);\nconst chars = chunks.reduce((a, c) => a + c.text.length, 0);\nconst available = chunks.length ? chunks[0].chunks_available : 0;\nconst batches = [];\nfor (let run = 0; run < 500; run++) {\n  let items = [];\n  try { items = $('Batch Result').all(0, run); } catch (e) { break; }\n  if (!items.length) { break; }\n  batches.push(items[0].json);\n}\nconst batchesFailed = batches.filter(b => !b.batch_ok).length;\nconst calls = 1 + batches.length + themes.length;\nconst failedLinks = sources.filter(s => s.fetch_ok === false).map(s => s.url);\nconst skipped = $('Build Sources').first().json.links_skipped || 0;\nconst warnings = [];\nif (batchesFailed > 0) { warnings.push(batchesFailed + ' of ' + batches.length + ' AI batches failed, so some text is in no theme. Submit again in a minute.'); }\nif (themes.some(t => !t.insight)) { warnings.push('At least one insight could not be written. It is flagged below.'); }\nif (failedLinks.length) { warnings.push('Could not read ' + failedLinks.length + ' link(s): ' + failedLinks.join(', ')); }\nif (skipped) { warnings.push(skipped + ' line(s) under Web links did not start with http and were skipped.'); }\nif (available > chunks.length) { warnings.push('Only ' + chunks.length + ' of ' + available + ' text pieces were analysed, to stay inside the token budget.'); }\nconst summary = {\n  sources_requested: $('Split Sources').all().length,\n  sources_with_text: sources.filter(s => String(s.text || '').length >= 30).length,\n  sources_fetch_failed: failedLinks.length,\n  links_skipped: skipped,\n  chunks_available: available,\n  chunks_used: chunks.length,\n  chunks_placed_in_a_theme: placed,\n  chunks_in_no_theme: chunks.length - placed,\n  ai_batches: batches.length,\n  ai_batches_failed: batchesFailed,\n  themes: themes.length,\n  themes_needing_review: themes.filter(t => t.needs_review).length,\n  redactions_made: redactions,\n  ai_calls: calls,\n  est_tokens: Math.ceil(chars / 4) * 2 + calls * 1100\n};\nconst cards = themes.map(t => ({ title: t.theme, text: t.insight, tags: Object.keys(t.source_types), evidence: t.quotes.map(q => q.source_id + ': ' + q.text), needs_review: t.needs_review }));\nfunction esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;'); }\nconst themeHtml = themes.map(t => {\n  const quotes = t.quotes.map(q => '<blockquote style=\"margin:8px 0;padding:6px 12px;border-left:3px solid #999\">' + esc(q.text) + '<br><small>' + esc(q.title) + '</small></blockquote>').join('');\n  const flags = t.flags.map(f => '<li>' + esc(f) + '</li>').join('');\n  const flagHtml = flags ? '<p style=\"margin:8px 0 0;color:#8a4b00\"><b>Check this:</b></p><ul style=\"margin:4px 0;color:#8a4b00\">' + flags + '</ul>' : '';\n  const limit = t.caveat ? '<p style=\"margin:0 0 8px\"><small>Limit: ' + esc(t.caveat) + '</small></p>' : '';\n  return '<div style=\"background:#fff;color:#1a1a1a;border:1px solid #ccc;border-radius:8px;padding:14px;margin:14px 0\"><h2 style=\"margin:0 0 6px;font-size:18px\">' + esc(t.theme) + '</h2><p style=\"margin:0 0 8px\">' + esc(t.insight) + '</p>' + limit + quotes + flagHtml + '</div>';\n}).join('');\nconst warnHtml = warnings.length ? '<div style=\"background:#fff4e0;color:#5c3a00;border-radius:8px;padding:10px 14px;margin:14px 0\"><b>Please note</b><ul style=\"margin:6px 0\">' + warnings.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>' : '';\nconst report_html = '<div style=\"max-width:760px;margin:0 auto;text-align:left;font-family:system-ui,sans-serif;line-height:1.5\"><h1 style=\"font-size:22px;margin:0 0 6px\">Insights</h1><p style=\"margin:0 0 6px\">' + esc(cfg.focus_question) + '</p><p style=\"margin:0\"><small>Sources read: ' + summary.sources_with_text + '. Text pieces: ' + chunks.length + '. Placed in a theme: ' + placed + '. Themes: ' + themes.length + '. Details hidden: ' + redactions + '. This is AI output: check every insight before you use it.</small></p>' + warnHtml + themeHtml + '<details style=\"margin:14px 0\"><summary>Cards for Miro or FigJam (JSON)</summary><pre style=\"white-space:pre-wrap;font-size:12px\">' + esc(JSON.stringify(cards, null, 2)) + '</pre></details></div>';\nreturn [{ json: { summary, warnings, themes, miro_cards: cards, report_html } }];"
+      }
+    },
+    {
+      "id": "d32ba32c-58ed-4d42-a904-1aab64024db3",
+      "name": "Write Insight",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        8600,
+        300
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ \"Theme: \" + $json.name + \"\\nDescription: \" + $json.description + \"\\n\\nEvidence (chunk_id [source type]: text):\\n\" + $json.prompt_chunks.map(c => c.chunk_id + \" [\" + c.source_type + \"]: \" + c.text).join(\"\\n\") }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You write one insight for a qualitative research synthesis. Use ONLY the evidence given. insight: one or two plain sentences saying what the evidence shows about this theme, with no claim beyond it. supporting_chunk_ids: two to four chunk_ids copied exactly from the evidence that best support the insight. caveat: one sentence on what the evidence cannot show (for example only one kind of source, or a small sample), or the word none.\nResearch focus: {{ $(\"Run Inputs\").first().json.focus_question }}"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "c93b7c60-55c8-4385-a7e6-8986306207a5",
+      "name": "Groq Insight Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        8500,
+        620
+      ],
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0,
+          "maxTokensToSample": 1500
+        }
+      },
+      "credentials": {
+        "groqApi": {
+          "name": "Groq account (replace with yours)"
+        }
+      }
+    },
+    {
+      "id": "d24f9b37-237e-4308-a4ba-55215425a1f8",
+      "name": "Insight Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        8750,
+        620
+      ],
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"insight\":{\"type\":\"string\"},\"supporting_chunk_ids\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"caveat\":{\"type\":\"string\"}},\"required\":[\"insight\",\"supporting_chunk_ids\",\"caveat\"]}"
+      }
+    },
+    {
+      "id": "300bc060-9f51-4cc2-84f9-13cff4cfa65d",
+      "name": "Attach Insight",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        8900,
+        300
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "n1",
+              "name": "theme_id",
+              "type": "string",
+              "value": "={{ $(\"Insight Loop\").first().json.theme_id }}"
+            },
+            {
+              "id": "n2",
+              "name": "insight",
+              "type": "string",
+              "value": "={{ $json.output?.insight || \"\" }}"
+            },
+            {
+              "id": "n3",
+              "name": "supporting_chunk_ids",
+              "type": "array",
+              "value": "={{ $json.output?.supporting_chunk_ids || [] }}"
+            },
+            {
+              "id": "n4",
+              "name": "caveat",
+              "type": "string",
+              "value": "={{ $json.output?.caveat || \"\" }}"
+            },
+            {
+              "id": "n5",
+              "name": "ok",
+              "type": "boolean",
+              "value": "={{ !!$json.output?.insight }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "19960120-ba79-4bec-948d-0daa4a1c49ed",
+      "name": "Pace Insight",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        9200,
+        300
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "c7b85359-019b-425f-9050-2539195a8dfb",
+      "name": "Insight Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        8300,
+        0
+      ],
+      "parameters": {
+        "batchSize": 1
+      }
+    },
+    {
+      "id": "1bf0207c-032d-4396-937e-67a05f6033c6",
+      "name": "Pack Batch",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6000,
+        300
+      ],
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "batch",
+        "include": "allFields"
+      }
+    },
+    {
+      "id": "6fb0c5ff-261a-4a53-b870-3e4c56403f03",
+      "name": "Assign Themes",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        6300,
+        300
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.batch.map(c => c.chunk_id + \": \" + c.text).join(\"\\n\") }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Assign each chunk in the user message to the single best-fitting theme. Use the exact chunk_id from the list and a theme_id from the themes below. Use NONE when no theme fits. Return exactly one assignment per chunk.\n\nThemes:\n{{ $json.batch[0].output.themes.map(t => t.theme_id + \": \" + t.name + \" - \" + t.description).join(\"\\n\") }}"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "f78d46fd-96cb-427c-b327-52755f552a52",
+      "name": "Groq Assign Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        6200,
+        620
+      ],
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0,
+          "maxTokensToSample": 1500
+        }
+      },
+      "credentials": {
+        "groqApi": {
+          "name": "Groq account (replace with yours)"
+        }
+      }
+    },
+    {
+      "id": "9c97b0fd-94d9-4c4c-ba83-f5daa3e3f7f5",
+      "name": "Assignment Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        6450,
+        620
+      ],
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"assignments\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"chunk_id\":{\"type\":\"string\"},\"theme_id\":{\"type\":\"string\"}},\"required\":[\"chunk_id\",\"theme_id\"]}}},\"required\":[\"assignments\"]}"
+      }
+    },
+    {
+      "id": "9eaa3209-1fe6-4364-bdfa-b4510ebc3a0d",
+      "name": "Batch Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        6600,
+        300
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "assignments",
+              "type": "array",
+              "value": "={{ $json.output?.assignments || [] }}"
+            },
+            {
+              "id": "b2",
+              "name": "batch_ok",
+              "type": "boolean",
+              "value": "={{ !!$json.output?.assignments }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "576ccb5e-7451-4ee5-815e-73539499abf9",
+      "name": "Pace Assign",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        6900,
+        300
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "c591f823-90da-4182-8f17-420fd5feef73",
+      "name": "Assign Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        5700,
+        0
+      ],
+      "parameters": {
+        "batchSize": 8
+      }
+    },
+    {
+      "id": "14d8202e-65e7-4c58-bf8f-d1b99607ad87",
+      "name": "Sticky Note 2e3ccc29",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -1100
+      ],
+      "parameters": {
+        "content": "## Insight Synthesis Engine\nTurns interview transcripts plus blog, web and note text into themes, each with an insight and the exact quotes behind it.\n\n**To use it:** open the form at /form/insight-engine, paste your material, press Analyse and wait on the page. You never need to edit a node.\n\n**Pattern:** every stage ends in a check. If a check fails, the form shows a plain message and the run stops.\n\nNeeds a Groq credential (free tier works). Advanced limits are in Run Inputs. Tested on small samples, not at scale.",
+        "color": 4,
+        "width": 760,
+        "height": 460
+      }
+    },
+    {
+      "id": "f71fe6e6-ae46-47ed-a021-05e40443dc4b",
+      "name": "Sticky Note a7b8b17b",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -520
+      ],
+      "parameters": {
+        "content": "## 1 Load the sources\nTurns the form into a list of sources. If nothing was given, the form shows a plain message and the run stops here. Web links are downloaded and reduced to their paragraph text.",
+        "color": 7,
+        "width": 2840,
+        "height": 1000
+      }
+    },
+    {
+      "id": "d0feb80a-7862-4f8d-8938-84efcf7890b7",
+      "name": "Sticky Note fb12d9fd",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        -520
+      ],
+      "parameters": {
+        "content": "## 2 Anonymise and chunk\nNames you list, emails and phone numbers are replaced BEFORE any AI call. Text is cut into short pieces, taken in turn from each source so no source dominates, up to the token budget. If no usable text is left, the run stops with a plain message.",
+        "color": 7,
+        "width": 1150,
+        "height": 740
+      }
+    },
+    {
+      "id": "de021fbe-e5ea-48eb-af60-158764b2c9dc",
+      "name": "Sticky Note 6ce9b953",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3980,
+        100
+      ],
+      "parameters": {
+        "content": "## 3 Find the themes\nOne AI call reads a sample of the text and proposes a few themes. If it fails, the run stops with a plain message instead of wasting calls.",
+        "color": 7,
+        "width": 1220,
+        "height": 720
+      }
+    },
+    {
+      "id": "df657d6f-944f-4452-8699-503d306a882f",
+      "name": "Sticky Note 33056859",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5280,
+        -220
+      ],
+      "parameters": {
+        "content": "## 4 Place every chunk in a theme\nChunks go to the AI in small batches with a pause between calls (Groq free tier: 8,000 tokens per minute). An unreadable answer leaves its chunks unassigned and flagged.",
+        "color": 7,
+        "width": 2120,
+        "height": 1120
+      }
+    },
+    {
+      "id": "43e5ba46-a930-480f-9c42-af8ec7e4ca34",
+      "name": "Sticky Note 87e446bc",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7580,
+        -520
+      ],
+      "parameters": {
+        "content": "## 5 Write the insights and show the report\nOne AI call per theme returns an insight and piece ids only. The quotes are copied from your text by code, so they are never reworded. The report opens on the form page, with warnings, flags and cards for Miro or FigJam.",
+        "color": 7,
+        "width": 2540,
+        "height": 1420
+      }
+    },
+    {
+      "id": "57331916-6815-42dc-ad9e-ba87e9523b36",
+      "name": "Check: Any Sources?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ Array.isArray($json.sources) && $json.sources.length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "4d1e1842-8179-4e38-830e-8dd795279c69",
+      "name": "Form: Start Here",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -300,
+        0
+      ],
+      "parameters": {
+        "authentication": "none",
+        "formTitle": "Insight Synthesis Engine",
+        "formDescription": "Paste what you have, press Analyse, and wait a few minutes on this page. You will get themes, insights and the exact quotes behind them. You check every insight before using it.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Research question",
+              "fieldType": "text",
+              "placeholder": "What do you want to understand?",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Interview transcripts",
+              "fieldType": "textarea",
+              "placeholder": "Paste transcripts here. Put a line with --- between two transcripts."
+            },
+            {
+              "fieldLabel": "Other text",
+              "fieldType": "textarea",
+              "placeholder": "Blogs, notes, reports. Put a line with --- between two pieces."
+            },
+            {
+              "fieldLabel": "Web links",
+              "fieldType": "textarea",
+              "placeholder": "One link per line."
+            },
+            {
+              "fieldLabel": "Names to hide",
+              "fieldType": "text",
+              "placeholder": "Asha, Ravi, Meera"
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "insight-engine",
+          "buttonLabel": "Analyse",
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "104a73df-0a36-44dd-9c23-3a0dae4d798c",
+      "name": "Build Sources",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const j = $input.first().json;\nfunction blocks(text) {\n  return String(text || '').replace(/\\r/g, '').split(/^ *-{3,} *$/m).map(s => s.trim()).filter(Boolean);\n}\nconst sources = [];\nblocks(j.transcripts_text).forEach((t, i) => sources.push({ source_id: 'T' + (i + 1), source_type: 'transcript', title: 'Transcript ' + (i + 1), text: t }));\nblocks(j.other_text).forEach((t, i) => sources.push({ source_id: 'N' + (i + 1), source_type: 'text', title: 'Text ' + (i + 1), text: t }));\nconst lines = String(j.links || '').replace(/\\r/g, '').split('\\n').map(s => s.trim()).filter(Boolean);\nconst good = lines.filter(l => /^https?:\\/\\//i.test(l));\ngood.forEach((u, i) => sources.push({ source_id: 'W' + (i + 1), source_type: 'web', title: u, url: u }));\nreturn [{ json: { sources, links_skipped: lines.length - good.length } }];"
+      },
+      "notes": "Why Code: Split Out considered, but one form field holds many sources split by --- lines, and each needs an id and a type."
+    },
+    {
+      "id": "61bd3977-7663-4747-a7bf-127244fcdf06",
+      "name": "Problem: No Sources",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "Nothing to analyse",
+        "completionMessage": "Paste a transcript, paste some text, or add a web link, then try again."
+      }
+    },
+    {
+      "id": "f3d453a1-3edf-43de-932f-72c26f5d0508",
+      "name": "Check: Any Text?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3500,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c2",
+              "leftValue": "={{ !$json.no_text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "64cbfbc7-9ebc-4ecc-a101-4df42787e79b",
+      "name": "Problem: No Text",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        3800,
+        -300
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "No usable text found",
+        "completionMessage": "Every source was empty, too short, or a link that could not be read. Paste more text or try other links."
+      }
+    },
+    {
+      "id": "6df14cd8-4026-43e6-99be-cf922634c702",
+      "name": "Check: Got Themes?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4700,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c3",
+              "leftValue": "={{ ($json.output?.themes || []).length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "ed2edc53-a56b-4f00-b5aa-c17951b6ad96",
+      "name": "Problem: No Themes",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        5000,
+        300
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "The AI could not find themes",
+        "completionMessage": "This is usually a rate limit. Wait one minute and submit the form again."
+      }
+    },
+    {
+      "id": "8e9bc7b9-f8c9-4810-8560-a91525161ef5",
+      "name": "Check: Chunks Placed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        8000,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c4",
+              "leftValue": "={{ !$json.no_placement }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "2723d8d0-c48c-4a91-a684-7a6dd97ded47",
+      "name": "Problem: Nothing Placed",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        8300,
+        -300
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "The AI placed nothing in a theme",
+        "completionMessage": "This is usually a rate limit, or the sources do not relate to your question. Wait one minute and submit again."
+      }
+    },
+    {
+      "id": "668c80f5-a3fc-4302-a0e4-be33b3c05317",
+      "name": "Show Report",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        9900,
+        0
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "={{ $json.report_html }}"
+      }
+    }
+  ],
+  "connections": {
+    "Split Sources": {
+      "main": [
+        [
+          {
+            "node": "Needs Fetch?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Fetch?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "All Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Page": {
+      "main": [
+        [
+          {
+            "node": "Page To Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Page To Text": {
+      "main": [
+        [
+          {
+            "node": "Attach Source Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Source Info": {
+      "main": [
+        [
+          {
+            "node": "All Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "All Sources": {
+      "main": [
+        [
+          {
+            "node": "Anonymise",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anonymise": {
+      "main": [
+        [
+          {
+            "node": "Chunk Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Chunks": {
+      "main": [
+        [
+          {
+            "node": "Propose Themes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Theme Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Propose Themes",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Theme Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Propose Themes",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Themes": {
+      "main": [
+        [
+          {
+            "node": "Assign Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Assignments": {
+      "main": [
+        [
+          {
+            "node": "Group By Theme",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Insight": {
+      "main": [
+        [
+          {
+            "node": "Attach Insight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Insight Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write Insight",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insight Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Write Insight",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Insight": {
+      "main": [
+        [
+          {
+            "node": "Pace Insight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace Insight": {
+      "main": [
+        [
+          {
+            "node": "Insight Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insight Loop": {
+      "main": [
+        [
+          {
+            "node": "Build Report",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write Insight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pack Batch": {
+      "main": [
+        [
+          {
+            "node": "Assign Themes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Themes": {
+      "main": [
+        [
+          {
+            "node": "Batch Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Assign Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Assign Themes",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assignment Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Assign Themes",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Result": {
+      "main": [
+        [
+          {
+            "node": "Pace Assign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace Assign": {
+      "main": [
+        [
+          {
+            "node": "Assign Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Loop": {
+      "main": [
+        [
+          {
+            "node": "Split Assignments",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pack Batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form: Start Here": {
+      "main": [
+        [
+          {
+            "node": "Run Inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Inputs": {
+      "main": [
+        [
+          {
+            "node": "Build Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Any Sources?": {
+      "main": [
+        [
+          {
+            "node": "Split Sources",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Problem: No Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Sources": {
+      "main": [
+        [
+          {
+            "node": "Check: Any Sources?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk Text": {
+      "main": [
+        [
+          {
+            "node": "Check: Any Text?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Any Text?": {
+      "main": [
+        [
+          {
+            "node": "Collect Chunks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Attach Themes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Problem: No Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Propose Themes": {
+      "main": [
+        [
+          {
+            "node": "Check: Got Themes?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Got Themes?": {
+      "main": [
+        [
+          {
+            "node": "Attach Themes",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Problem: No Themes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Group By Theme": {
+      "main": [
+        [
+          {
+            "node": "Check: Chunks Placed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Chunks Placed?": {
+      "main": [
+        [
+          {
+            "node": "Insight Loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Problem: Nothing Placed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Report": {
+      "main": [
+        [
+          {
+            "node": "Show Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}
