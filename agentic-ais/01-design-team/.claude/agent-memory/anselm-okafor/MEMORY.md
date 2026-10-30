@@ -1,0 +1,1 @@
+- [Session-one distinctness in adult digital literacy](session-one-distinctness.md) — first sessions are structural inflection points; design first contact separately from continuation

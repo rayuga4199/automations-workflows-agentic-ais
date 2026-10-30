@@ -1,0 +1,1 @@
+- [Accessible SPA form patterns](feedback_spa_forms.md) — Form labels with for/id, :focus-visible, textContent over innerHTML for safety

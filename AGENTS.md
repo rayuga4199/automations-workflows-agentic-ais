@@ -3,7 +3,7 @@
 You are probably here to understand the work and write about it (for example a portfolio page), or to reproduce or extend a workflow. This file tells you how to read the repo and what you may and may not claim.
 
 ## What this repo is
-A collection of projects by one researcher (Yash Bhagat), in three folders: `workflows/` (n8n automations), `agents/` (single tool-using AI, empty), `agentic-ais/` (multi-agent systems, empty). Four projects are planned and two exist: `workflows/01-research-and-conference-hunter/` and `workflows/02-insight-synthesis-engine/`. The other two (Research Writer, Design Team) are listed in the root `README.md` as planned. They have no code, no tests and no results, so never describe them as working, and never invent their features beyond the one-line descriptions there.
+A collection of projects by one researcher (Yash Bhagat), in three folders: `workflows/` (n8n automations), `agents/` (single tool-using AI, empty), `agentic-ais/` (multi-agent systems, empty). Four projects are planned and three are in this repo: `workflows/01-research-and-conference-hunter/`, `workflows/02-insight-synthesis-engine/` and `agentic-ais/01-design-team/`. Research Writer exists only as an n8n draft, so describe it only as the root `README.md` does.
 
 ## How to read it
 1. This file.
@@ -15,6 +15,7 @@ Then, for each project folder:
 6. `workflow.json`, `sample-input/`, `sample-output/`: the artefacts themselves.
 
 ## Rules
+- **Fictional agents:** the Design Team characters are made up. Never present them or their careers as real people.
 - **Project type:** every project has one label: Workflow, AI agent or Agentic AI. Use the `Type` line at the top of its README. Do not call a workflow an agent.
 - **Source of truth:** if two files disagree, the order of trust is `workflow.json` and `sample-output/` (artefacts), then `eval.md`, then `README.md`, then `PORTFOLIO_BRIEF.md`. Report the disagreement; do not pick the nicer number.
 - **Do not invent.** No user counts, time-saved figures, accuracy figures, testimonials or features that are not in the files. If a fact is missing, say it is missing.

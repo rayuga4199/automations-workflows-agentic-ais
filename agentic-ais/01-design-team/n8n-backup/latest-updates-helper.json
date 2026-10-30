@@ -1,0 +1,236 @@
+{
+  "name": "[Agentic AI Helper] Design Team Latest Updates",
+  "nodes": [
+    {
+      "id": "5c5e10ce-7516-4c1a-a588-6a50d5d8cf1a",
+      "name": "Tool Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "query",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eaf60324-2617-49f6-ac3b-ce36c9a0c608",
+      "name": "Latest Tech News",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://hn.algolia.com/api/v1/search_by_date",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $(\"Tool Input\").first().json.query }}"
+            },
+            {
+              "name": "tags",
+              "value": "story"
+            },
+            {
+              "name": "hitsPerPage",
+              "value": "4"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "4035756e-2afb-4cd4-ac17-858630a71179",
+      "name": "Encyclopedia Lookup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        600,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://en.wikipedia.org/w/rest.php/v1/search/page",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $(\"Tool Input\").first().json.query }}"
+            },
+            {
+              "name": "limit",
+              "value": "2"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "DesignTeamAgents/0.1 (research prototype)"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "94aab166-e994-48d4-b5b6-2bcbee57621f",
+      "name": "Newest Papers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        900,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.openalex.org/works",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "search",
+              "value": "={{ $(\"Tool Input\").first().json.query }}"
+            },
+            {
+              "name": "filter",
+              "value": "=from_publication_date:{{ $now.minus({ years: 2 }).toFormat(\"yyyy-MM-dd\") }},to_publication_date:{{ $now.toFormat(\"yyyy-MM-dd\") }}"
+            },
+            {
+              "name": "per_page",
+              "value": "3"
+            },
+            {
+              "name": "select",
+              "value": "title,publication_date,doi"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "fd058f98-5f2c-4cd2-8f09-adbe6b268e4b",
+      "name": "Format Updates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "function get(name) { try { return $(name).first().json || {}; } catch (e) { return {}; } }\nfunction clean(s, n) { return String(s || '').replace(/<[^>]*>/g, '').replace(/&quot;/g, '\"').replace(/&amp;/g, '&').slice(0, n); }\nconst news = (get('Latest Tech News').hits || []).slice(0, 3).map(h => ({ date: String(h.created_at || '').slice(0, 10), title: clean(h.title, 110), url: h.url || '' }));\nconst encyclopedia = (get('Encyclopedia Lookup').pages || []).slice(0, 1).map(p => ({ title: p.title, summary: clean(p.excerpt, 140) }));\nconst papers = (get('Newest Papers').results || []).slice(0, 2).map(p => ({ date: p.publication_date, title: clean(p.title, 110), doi: String(p.doi || '').replace('https://doi.org/', '') }));\nreturn [{ json: { checked_on: DateTime.now().toFormat('yyyy-MM-dd'), news, encyclopedia, papers, rule: 'Mention an item only if it truly changes a decision, and give its exact title and date. News titles are unverified headlines. Never attach these dates to anything else. If nothing applies, write: Nothing recent changes this.' } }];"
+      }
+    },
+    {
+      "id": "a4d20e00-1678-424c-9ef5-7434337b6f52",
+      "name": "Sticky Note e7bc57a3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -96
+      ],
+      "parameters": {
+        "content": "## Latest updates\nCalled by the Design Team agents while they work. Reads three free public sources on every call, so the answer is current for that run. No API keys.",
+        "color": 4,
+        "width": 1360,
+        "height": 224
+      }
+    }
+  ],
+  "connections": {
+    "Tool Input": {
+      "main": [
+        [
+          {
+            "node": "Latest Tech News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Latest Tech News": {
+      "main": [
+        [
+          {
+            "node": "Encyclopedia Lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encyclopedia Lookup": {
+      "main": [
+        [
+          {
+            "node": "Newest Papers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Newest Papers": {
+      "main": [
+        [
+          {
+            "node": "Format Updates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

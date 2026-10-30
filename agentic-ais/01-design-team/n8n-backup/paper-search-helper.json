@@ -1,0 +1,233 @@
+{
+  "name": "[AI Agent Helper] Research Writer Tools",
+  "nodes": [
+    {
+      "id": "db18872f-913b-4cb7-b555-fe487029fae7",
+      "name": "Tool Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "action",
+              "type": "string"
+            },
+            {
+              "name": "query",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "062a3f1f-076f-4756-b5d5-74727cd4bd85",
+      "name": "Ledger Or Papers?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.action === \"ledger\" }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "d17fcbf8-a82a-4e9c-a6b9-d277c4a88d41",
+      "name": "Get Ledger",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        650,
+        -200
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "research_ledger"
+        },
+        "returnAll": true
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "9dea895f-8a09-4bb1-9adc-8780ea319c0d",
+      "name": "Format Ledger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        950,
+        -200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const q = String($('Tool Input').first().json.query || '').toLowerCase();\nconst words = q.split(/[^\\p{L}\\p{N}]+/u).filter(w => w.length > 2);\nconst rows = $input.all().map(i => i.json).filter(r => r.quote);\nfunction score(r) {\n  const hay = (r.quote + ' ' + r.source_title + ' ' + (r.note || '')).toLowerCase();\n  return words.filter(w => hay.includes(w)).length;\n}\nlet picked = rows;\nif (words.length) {\n  picked = rows.map(r => ({ r, s: score(r) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s).map(x => x.r);\n}\nconst entries = picked.slice(0, 40).map(r => ({ ledger_id: r.id, quote: r.quote, page: r.page || 'not recorded', source: r.source_title, authors: r.authors, year: r.year, doi: r.doi }));\nreturn [{ json: { total_in_ledger: rows.length, returned: entries.length, entries } }];"
+      }
+    },
+    {
+      "id": "c785338f-685d-46c0-9dab-92a9d1a4ab12",
+      "name": "Build Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        650,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const j = $input.first().json;\nconst q = String(j.query || '').trim();\nconst base = 'https://api.openalex.org/works';\nconst select = 'select=doi,title,publication_year,authorships,abstract_inverted_index,primary_location';\nconst m = q.match(/10[.][0-9]{4,9}[/][^ ]+/);\nlet url;\nif (j.action === 'verify' && m) {\n  const doi = m[0].replace(/[.,;)]+$/, '').toLowerCase();\n  url = base + '?filter=doi:' + encodeURIComponent(doi) + '&' + select;\n} else if (j.action === 'verify') {\n  url = base + '?filter=title.search:' + encodeURIComponent(q.replace(/[,:|]/g, ' ')) + '&per_page=3&' + select;\n} else {\n  url = base + '?search=' + encodeURIComponent(q) + '&per_page=5&' + select;\n}\nreturn [{ json: { action: j.action, query: q, is_doi: !!m, url } }];"
+      }
+    },
+    {
+      "id": "7dc812ef-fd72-408a-bc78-fa268f2a6a33",
+      "name": "Call OpenAlex",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        950,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "c7aab222-820b-4d64-83d1-ea238d7af7d9",
+      "name": "Format Papers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1250,
+        200
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const req = $('Build Request').first().json;\nconst res = $input.first().json;\nif (res.error || !Array.isArray(res.results)) {\n  return [{ json: { ok: false, message: 'The paper database could not be reached. Tell the user. Do not guess.' } }];\n}\nfunction abstractOf(idx) {\n  if (!idx) { return 'no abstract available'; }\n  const pos = [];\n  for (const [word, places] of Object.entries(idx)) { for (const p of places) { pos[p] = word; } }\n  return pos.filter(Boolean).join(' ').slice(0, 500);\n}\nfunction norm(s) { return String(s || '').toLowerCase().replace(/[^\\p{L}\\p{N}]+/gu, ''); }\nconst works = res.results.map(w => ({\n  title: w.title,\n  authors: (w.authorships || []).slice(0, 3).map(a => a.author.display_name).join(', '),\n  year: w.publication_year,\n  doi: String(w.doi || '').replace('https://doi.org/', ''),\n  venue: w.primary_location?.source?.display_name || '',\n  abstract: abstractOf(w.abstract_inverted_index)\n}));\nif (req.action === 'verify') {\n  const verified = req.is_doi ? works.length > 0 : works.some(w => norm(w.title) === norm(req.query));\n  const records = works.slice(0, 3).map(w => ({ title: w.title, authors: w.authors, year: w.year, doi: w.doi, venue: w.venue }));\n  return [{ json: { ok: true, verified, searched_for: req.query, records } }];\n}\nreturn [{ json: { ok: true, results: works } }];"
+      }
+    },
+    {
+      "id": "aff84da1-4653-4aca-b60d-e278a2d1b754",
+      "name": "Sticky Note c8ad8d41",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -96
+      ],
+      "parameters": {
+        "content": "## Research Writer tools\nCalled by the Research Writer agent. Do not run this by hand.\n\n**ledger:** returns saved quotes. Read only, so the agent cannot add to the ledger.\n**search:** finds papers on OpenAlex.\n**verify:** checks that a reference exists.\n\nAnswers come from the database or the ledger, never from the AI.",
+        "color": 4,
+        "width": 464,
+        "height": 224
+      }
+    }
+  ],
+  "connections": {
+    "Tool Input": {
+      "main": [
+        [
+          {
+            "node": "Ledger Or Papers?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ledger Or Papers?": {
+      "main": [
+        [
+          {
+            "node": "Get Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ledger": {
+      "main": [
+        [
+          {
+            "node": "Format Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Request": {
+      "main": [
+        [
+          {
+            "node": "Call OpenAlex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpenAlex": {
+      "main": [
+        [
+          {
+            "node": "Format Papers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neighbourhood Tool Library</title>
+  <style>
+    :root {
+      --primary-action: #2D7F2B;
+      --available-badge: #4CAF50;
+      --reserved-badge: #CCCCCC;
+      --reserved-text: #555555;
+      --bg-primary: #FFFFFF;
+      --bg-surface: #F5F5F5;
+      --text-primary: #212121;
+      --text-secondary: #666666;
+      --focus-outline: 2px solid #0056B3;
+      --spacing-base: 8px;
+      --border-radius: 6px;
+      --spacing: calc(var(--spacing-base) * 2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+      line-height: 1.5;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background-color: var(--bg-surface);
+      padding: calc(var(--spacing) * 4) var(--spacing);
+      text-align: center;
+      border-bottom: 1px solid #E0E0E0;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      margin-bottom: var(--spacing);
+      color: var(--text-primary);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: calc(var(--spacing) * 2);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background-color: var(--primary-action);
+      color: #FFFFFF;
+      padding: var(--spacing) calc(var(--spacing) * 2);
+      text-decoration: none;
+      border: 2px solid var(--primary-action);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #1F5A1F;
+      border-color: #1F5A1F;
+    }
+
+    .btn-primary:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    /* CATALOGUE SECTION */
+    .catalogue {
+      padding: calc(var(--spacing) * 3) var(--spacing);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .search-bar {
+      position: sticky;
+      top: 0;
+      background-color: var(--bg-primary);
+      padding: var(--spacing) 0;
+      margin-bottom: calc(var(--spacing) * 2);
+      border-bottom: 1px solid #E0E0E0;
+      z-index: 10;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 500px;
+      padding: var(--spacing);
+      font-size: 1rem;
+      border: 1px solid #D0D0D0;
+      border-radius: var(--border-radius);
+      font-family: inherit;
+    }
+
+    .search-input:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+      border-color: var(--primary-action);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing);
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .filter-btn {
+      padding: var(--spacing) calc(var(--spacing) * 1.5);
+      border: 1px solid #D0D0D0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary-action);
+    }
+
+    .filter-btn:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    .filter-btn.active {
+      background-color: var(--primary-action);
+      color: #FFFFFF;
+      border-color: var(--primary-action);
+    }
+
+    .result-count {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .tool-grid {
+      display: grid;
+      gap: var(--spacing);
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      margin-bottom: calc(var(--spacing) * 3);
+    }
+
+    @media (min-width: 768px) {
+      .tool-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .tool-card {
+      background-color: var(--bg-primary);
+      border: 1px solid #E0E0E0;
+      border-radius: var(--border-radius);
+      padding: var(--spacing);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .tool-card:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .tool-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing);
+      color: var(--text-primary);
+    }
+
+    .tool-category {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing);
+    }
+
+    .tool-status {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing);
+      margin-bottom: var(--spacing);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: calc(var(--border-radius) / 2);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-available {
+      background-color: var(--available-badge);
+      color: #FFFFFF;
+    }
+
+    .badge-reserved {
+      background-color: var(--reserved-badge);
+      color: var(--reserved-text);
+    }
+
+    .btn-reserve {
+      background-color: var(--primary-action);
+      color: #FFFFFF;
+      border: none;
+      padding: var(--spacing) var(--spacing);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      margin-top: auto;
+    }
+
+    .btn-reserve:hover:not(:disabled) {
+      background-color: #1F5A1F;
+    }
+
+    .btn-reserve:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    .btn-reserve:disabled {
+      background-color: #CCCCCC;
+      color: var(--reserved-text);
+      cursor: not-allowed;
+    }
+
+    /* RESERVATION FORM SECTION */
+    .reservation-section {
+      background-color: var(--bg-surface);
+      padding: calc(var(--spacing) * 3) var(--spacing);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .form-container {
+      background-color: var(--bg-primary);
+      border-radius: var(--border-radius);
+      padding: calc(var(--spacing) * 2);
+      max-width: 600px;
+      margin: 0 auto;
+      border: 1px solid #E0E0E0;
+    }
+
+    .form-container h2 {
+      margin-bottom: calc(var(--spacing) * 2);
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: var(--spacing);
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: var(--spacing);
+      border: 1px solid #D0D0D0;
+      border-radius: var(--border-radius);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus-visible,
+    .form-group select:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+      border-color: var(--primary-action);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--primary-action);
+      color: #FFFFFF;
+      border: none;
+      padding: var(--spacing) var(--spacing);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      background-color: #1F5A1F;
+    }
+
+    .btn-submit:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    .btn-submit:disabled {
+      background-color: #CCCCCC;
+      cursor: not-allowed;
+    }
+
+    /* CONFIRMATION MESSAGE */
+    .confirmation-message {
+      background-color: #E8F5E9;
+      border: 1px solid var(--available-badge);
+      border-radius: var(--border-radius);
+      padding: calc(var(--spacing) * 2);
+      margin-bottom: calc(var(--spacing) * 2);
+      display: none;
+    }
+
+    .confirmation-message.show {
+      display: block;
+    }
+
+    .confirmation-message h3 {
+      color: #2E7D32;
+      margin-bottom: var(--spacing);
+    }
+
+    .confirmation-message p {
+      color: var(--text-primary);
+      margin-bottom: var(--spacing);
+    }
+
+    .btn-browse-more {
+      background-color: var(--primary-action);
+      color: #FFFFFF;
+      border: none;
+      padding: var(--spacing) calc(var(--spacing) * 2);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-browse-more:hover {
+      background-color: #1F5A1F;
+    }
+
+    .btn-browse-more:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: calc(var(--spacing) * 3);
+      color: var(--text-secondary);
+    }
+
+    .empty-state p {
+      font-size: 1rem;
+    }
+
+    /* SKIP LINK */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary-action);
+      color: white;
+      padding: 8px;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="#catalogue" class="skip-link">Skip to main content</a>
+
+  <!-- HERO SECTION -->
+  <section class="hero" aria-label="Hero section">
+    <h1>Neighbourhood Tool Library</h1>
+    <p>Borrow the tools you need from your community. No signup required.</p>
+    <button class="btn-primary" id="browseBtn" aria-label="Browse available tools">Browse Tools</button>
+  </section>
+
+  <!-- CATALOGUE SECTION -->
+  <section class="catalogue" id="catalogue" aria-label="Tool catalogue">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <label for="searchInput" style="display: block; margin-bottom: var(--spacing); font-weight: 500;">Search tools</label>
+      <input
+        type="search"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search by tool name..."
+        aria-label="Search tools by name"
+      >
+    </div>
+
+    <!-- Category Filters -->
+    <div>
+      <p style="font-weight: 500; margin-bottom: var(--spacing); font-size: 0.95rem;">Filter by category</p>
+      <div class="filters" role="group" aria-label="Category filters">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="Hand Tools">Hand Tools</button>
+        <button class="filter-btn" data-category="Power Tools">Power Tools</button>
+        <button class="filter-btn" data-category="Garden">Garden</button>
+        <button class="filter-btn" data-category="Ladders & Access">Ladders & Access</button>
+        <button class="filter-btn" data-category="Measuring & Layout">Measuring & Layout</button>
+        <button class="filter-btn" data-category="Other">Other</button>
+      </div>
+    </div>
+
+    <!-- Result Count -->
+    <div class="result-count" id="resultCount" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Tool Grid -->
+    <div class="tool-grid" id="toolGrid" role="region" aria-label="Available tools">
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <p>No tools found. Try adjusting your filters or search.</p>
+    </div>
+  </section>
+
+  <!-- RESERVATION FORM SECTION -->
+  <section class="reservation-section" aria-label="Reservation form section">
+    <div class="form-container">
+      <!-- Confirmation Message -->
+      <div class="confirmation-message" id="confirmationMessage" role="alert" aria-live="polite">
+        <h3>Reservation Received!</h3>
+        <p id="confirmationText"></p>
+        <button class="btn-browse-more" id="browseMoreBtn">Browse More Tools</button>
+      </div>
+
+      <!-- Form (hidden after submission) -->
+      <form id="reservationForm" aria-label="Tool reservation form">
+        <h2>Reserve a Tool</h2>
+
+        <div class="form-group">
+          <label for="nameInput">Name *</label>
+          <input type="text" id="nameInput" name="name" required aria-required="true">
+        </div>
+
+        <div class="form-group">
+          <label for="emailInput">Email *</label>
+          <input type="email" id="emailInput" name="email" required aria-required="true" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="phoneInput">Phone *</label>
+          <input type="tel" id="phoneInput" name="phone" required aria-required="true" autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+          <label for="toolNameInput">Tool Name *</label>
+          <input type="text" id="toolNameInput" name="toolName" required aria-required="true" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="startDateInput">Start Date *</label>
+          <input type="date" id="startDateInput" name="startDate" required aria-required="true">
+        </div>
+
+        <div class="form-group">
+          <label for="endDateInput">End Date *</label>
+          <input type="date" id="endDateInput" name="endDate" required aria-required="true">
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Reservation</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Sample tool data
+    const tools = [
+      { id: 1, name: 'Drill', category: 'Power Tools', available: true },
+      { id: 2, name: 'Circular Saw', category: 'Power Tools', available: false },
+      { id: 3, name: 'Hammer', category: 'Hand Tools', available: true },
+      { id: 4, name: 'Spade', category: 'Garden', available: true },
+      { id: 5, name: 'Tape Measure', category: 'Measuring & Layout', available: true },
+      { id: 6, name: 'Spirit Level', category: 'Measuring & Layout', available: true },
+      { id: 7, name: 'Ladder 3m', category: 'Ladders & Access', available: false },
+      { id: 8, name: 'Hedge Trimmer', category: 'Garden', available: true },
+      { id: 9, name: 'Jigsaw', category: 'Power Tools', available: true },
+      { id: 10, name: 'Wheelbarrow', category: 'Garden', available: true },
+      { id: 11, name: 'Wrench Set', category: 'Hand Tools', available: true },
+      { id: 12, name: 'Safety Goggles', category: 'Other', available: true }
+    ];
+
+    let currentCategory = 'all';
+    let currentSearch = '';
+
+    const browseBtn = document.getElementById('browseBtn');
+    const browseMoreBtn = document.getElementById('browseMoreBtn');
+    const searchInput = document.getElementById('searchInput');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const toolGrid = document.getElementById('toolGrid');
+    const resultCount = document.getElementById('resultCount');
+    const emptyState = document.getElementById('emptyState');
+    const reservationForm = document.getElementById('reservationForm');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    const confirmationText = document.getElementById('confirmationText');
+    const toolNameInput = document.getElementById('toolNameInput');
+
+    // Scroll to catalogue on Browse Tools click
+    browseBtn.addEventListener('click', () => {
+      document.getElementById('catalogue').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Search input handler
+    searchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value.toLowerCase();
+      renderTools();
+    });
+
+    // Filter button handler
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        renderTools();
+      });
+    });
+
+    // Render tools
+    function renderTools() {
+      const filtered = tools.filter(tool => {
+        const categoryMatch = currentCategory === 'all' || tool.category === currentCategory;
+        const searchMatch = tool.name.toLowerCase().includes(currentSearch);
+        return categoryMatch && searchMatch;
+      });
+
+      toolGrid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        emptyState.style.display = 'block';
+        resultCount.textContent = 'No tools found';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      resultCount.textContent = `Showing ${filtered.length} tool${filtered.length !== 1 ? 's' : ''}`;
+
+      filtered.forEach(tool => {
+        const toolCard = document.createElement('div');
+        toolCard.className = 'tool-card';
+        const badgeClass = tool.available ? 'badge-available' : 'badge-reserved';
+        const badgeText = tool.available ? 'Available' : 'Reserved';
+        const buttonDisabled = !tool.available;
+        const buttonText = tool.available ? 'Reserve' : 'Not Available';
+
+        toolCard.innerHTML = `
+          <h3 class="tool-name">${escapeHtml(tool.name)}</h3>
+          <p class="tool-category">${escapeHtml(tool.category)}</p>
+          <div class="tool-status">
+            <span class="badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <button
+            class="btn-reserve"
+            ${buttonDisabled ? 'disabled' : ''}
+            aria-label="${escapeHtml(tool.name)} - ${escapeHtml(badgeText)}"
+            data-tool-id="${tool.id}"
+            data-tool-name="${escapeHtml(tool.name)}"
+          >
+            ${buttonText}
+          </button>
+        `;
+
+        // Add reserve button handler for available tools
+        if (tool.available) {
+          toolCard.querySelector('.btn-reserve').addEventListener('click', () => {
+            toolNameInput.value = tool.name;
+            document.querySelector('.reservation-section').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('nameInput').focus();
+          });
+        }
+
+        toolGrid.appendChild(toolCard);
+      });
+    }
+
+    // Form submission handler
+    reservationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = {
+        name: document.getElementById('nameInput').value,
+        email: document.getElementById('emailInput').value,
+        phone: document.getElementById('phoneInput').value,
+        toolName: document.getElementById('toolNameInput').value,
+        startDate: document.getElementById('startDateInput').value,
+        endDate: document.getElementById('endDateInput').value
+      };
+
+      // Show confirmation message
+      confirmationText.textContent = `Thank you, ${escapeHtml(formData.name)}! Your reservation for the ${escapeHtml(formData.toolName)} has been received. We'll contact you at ${escapeHtml(formData.email)} to confirm.`;
+
+      reservationForm.style.display = 'none';
+      confirmationMessage.classList.add('show');
+      confirmationMessage.focus();
+    });
+
+    // Browse more button handler
+    browseMoreBtn.addEventListener('click', () => {
+      confirmationMessage.classList.remove('show');
+      reservationForm.style.display = 'block';
+      reservationForm.reset();
+      document.getElementById('catalogue').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // HTML escape function to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Initial render
+    renderTools();
+  </script>
+</body>
+</html>

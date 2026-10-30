@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Write(reports/**)",
+      "Edit(reports/**)",
+      "Write(.claude/agent-memory/**)",
+      "Edit(.claude/agent-memory/**)",
+      "Bash(mkdir:*)"
+    ]
+  }
+}

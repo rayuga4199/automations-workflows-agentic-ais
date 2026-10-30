@@ -1,0 +1,5 @@
+- [Volunteer ops as a design constraint](lesson_volunteer_ops_constraint.md) — For volunteer-run services, maintainability ceiling of the team is a binding design constraint; surface it at framing stage.
+- [Confirmation vs transaction](lesson_confirmation_vs_transaction.md) — A UI confirmation on form submit is not evidence data was saved; always verify the back-end pipeline exists before sign-off.
+- [First session as retention lever](lesson_first_session_as_retention_lever.md) — For anxious users, session one is a distinct high-stakes artefact, not week one of a generic template; design it separately.
+- [Anxiety-calibrated onboarding](lesson_anxiety_calibrated_onboarding.md) — When both primary users and volunteer facilitators carry anxiety, each group needs a separate onboarding artefact designed to its distinct confidence profile.
+- [Coordinator workload as failure point](lesson_coordinator_workload_as_failure_point.md) — In volunteer-run library programmes, the coordinator is the most common single point of failure; a deputy role and handover pack are non-negotiable deliverables.

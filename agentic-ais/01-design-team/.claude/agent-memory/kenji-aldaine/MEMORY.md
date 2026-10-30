@@ -1,0 +1,2 @@
+- [Session structure for adult learning](session-structure-for-adult-learning.md) — narration before action, recap via recognition, silent independent practice, always handwritten reminder card
+- [Accessibility in service design](accessibility-in-service-design.md) — accessibility as standard not add-on, handwritten touch, conversation over assumption, community reduces anxiety

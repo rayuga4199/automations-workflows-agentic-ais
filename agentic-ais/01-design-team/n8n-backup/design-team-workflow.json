@@ -1,0 +1,914 @@
+{
+  "name": "[Agentic AI] Design Team",
+  "nodes": [
+    {
+      "id": "319ba9ab-01bc-42a1-8a98-d913e780bc5b",
+      "name": "Form: Start Here",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "authentication": "none",
+        "formTitle": "Design Team",
+        "formDescription": "Tell the studio what you want to build. Five AI specialists will research it, prioritise it, design it and, if you ask for a build, write starter code. Stay on this page. It takes about 7 minutes.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "What do you want to build?",
+              "fieldType": "textarea",
+              "placeholder": "Who is it for, what should it do, and is it an app, website or service?",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Anything else the team should know?",
+              "fieldType": "textarea",
+              "placeholder": "Constraints, budget, market, deadline. Optional."
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "design-team",
+          "buttonLabel": "Start the team",
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "54bb2220-5c40-4a5d-879b-116b784a5c2d",
+      "name": "Run Inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "mode": "manual",
+        "includeOtherFields": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r1",
+              "name": "brief",
+              "type": "string",
+              "value": "={{ [$json[\"What do you want to build?\"], $json[\"Anything else the team should know?\"]].filter(Boolean).join(\" Context: \").trim() }}"
+            },
+            {
+              "id": "r2",
+              "name": "pace_seconds",
+              "type": "number",
+              "value": 60
+            },
+            {
+              "id": "r3",
+              "name": "max_context_chars",
+              "type": "number",
+              "value": 2500
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4111bc07-ec0d-4298-aecb-99b48c612854",
+      "name": "Check: Clear Brief?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.brief.length >= 15 }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "f63069bf-e157-4fe7-b9c6-81ee28406f87",
+      "name": "Load Team Memory",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "position": [
+        900,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "design_team_memory"
+        },
+        "returnAll": true
+      }
+    },
+    {
+      "id": "14634e43-5758-41de-8d2b-3b6c52e94259",
+      "name": "Give Each Agent Its Own Notes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const keys = ['vance', 'okafor', 'castellane', 'aldaine', 'vale'];\nconst rows = $input.all().map(i => i.json).filter(r => r.note && keys.includes(r.agent));\nconst notes = {};\nfor (const k of keys) {\n  const mine = rows.filter(r => r.agent === k).slice(-3).map(r => '- ' + r.note);\n  notes[k] = mine.length ? mine.join(String.fromCharCode(10)) : 'none yet';\n}\nreturn [{ json: { notes } }];"
+      }
+    },
+    {
+      "id": "05237008-b92d-4962-a63c-3a7fdebf3d45",
+      "name": "Vance: Frame The Brief",
+      "type": "n8n-nodes-base.messageAnAgent",
+      "typeVersion": 3.1,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [
+        1500,
+        0
+      ],
+      "parameters": {
+        "agentSource": "referenced",
+        "agentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_VANCE_AGENT_ID"
+        },
+        "message": "=FRAME this brief.\n\nBrief: {{ $(\"Run Inputs\").first().json.brief }}\n\nYour own notes from past projects:\n{{ $(\"Give Each Agent Its Own Notes\").first().json.notes.vance }}",
+        "advanced": {
+          "enableStreaming": false,
+          "invokeMode": "allItems",
+          "session": {
+            "session": {
+              "sessionIdType": "customKey",
+              "sessionKey": "=design-team-{{ $execution.id }}-vance"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "5dac6f43-2906-4ae9-901e-b12c99b51f77",
+      "name": "Read The Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1800,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const brief = $('Run Inputs').first().json.brief;\nconst text = String($input.first().json.text || '');\nconst m = text.match(/BUILD:[ *]*(yes|no)/i);\nconst guessed = /(build|code|develop|prototype|website|web app|app)/i.test(brief);\nconst build = m ? m[1].toLowerCase() === 'yes' : guessed;\nconst frame = text ? text.replace(/[*_ ]*memory:[\\s\\S]*$/i, '').trim() : 'The director could not frame this brief. Work from the brief itself and state your assumptions.';\nreturn [{ json: { frame, build, frame_ok: !!text } }];"
+      }
+    },
+    {
+      "id": "0996d0b6-1860-4b80-b8ac-753db0d10a16",
+      "name": "Pace 1",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2100,
+        0
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "31e441c0-7823-4175-b605-ae5270c04e4a",
+      "name": "Okafor: Research",
+      "type": "n8n-nodes-base.messageAnAgent",
+      "typeVersion": 3.1,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [
+        2400,
+        0
+      ],
+      "parameters": {
+        "agentSource": "referenced",
+        "agentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_OKAFOR_AGENT_ID"
+        },
+        "message": "=Research this brief for the studio.\n\nBrief: {{ $(\"Run Inputs\").first().json.brief }}\n\nDirector's framing:\n{{ $(\"Read The Plan\").first().json.frame }}\n\nYour own notes from past projects:\n{{ $(\"Give Each Agent Its Own Notes\").first().json.notes.okafor }}",
+        "advanced": {
+          "enableStreaming": false,
+          "invokeMode": "allItems",
+          "session": {
+            "session": {
+              "sessionIdType": "customKey",
+              "sessionKey": "=design-team-{{ $execution.id }}-okafor"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ea235498-0231-4363-9381-07cbb8294b60",
+      "name": "Pace 2",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2700,
+        0
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "abacfe79-3107-4f62-9ba5-928a5ef3021e",
+      "name": "Castellane: Prioritise",
+      "type": "n8n-nodes-base.messageAnAgent",
+      "typeVersion": 3.1,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [
+        3000,
+        0
+      ],
+      "parameters": {
+        "agentSource": "referenced",
+        "agentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_CASTELLANE_AGENT_ID"
+        },
+        "message": "=Decide what to build first.\n\nBrief: {{ $(\"Run Inputs\").first().json.brief }}\n\nDirector's framing:\n{{ $(\"Read The Plan\").first().json.frame }}\n\nProf. Okafor's research:\n{{ ($(\"Okafor: Research\").first().json.text || \"Research is not available. Treat everything as an assumption.\").replace(/[*_ ]*memory:[\\s\\S]*$/i, \"\").slice(0, $(\"Run Inputs\").first().json.max_context_chars) }}\n\nYour own notes from past projects:\n{{ $(\"Give Each Agent Its Own Notes\").first().json.notes.castellane }}",
+        "advanced": {
+          "enableStreaming": false,
+          "invokeMode": "allItems",
+          "session": {
+            "session": {
+              "sessionIdType": "customKey",
+              "sessionKey": "=design-team-{{ $execution.id }}-castellane"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "52b91f9d-bc06-4c77-8a23-6854ae327265",
+      "name": "Pace 3",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3300,
+        0
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "a4d0a4a7-b7ba-4ad2-9405-52d3998f9e82",
+      "name": "Aldaine: Design",
+      "type": "n8n-nodes-base.messageAnAgent",
+      "typeVersion": 3.1,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [
+        3600,
+        0
+      ],
+      "parameters": {
+        "agentSource": "referenced",
+        "agentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_ALDAINE_AGENT_ID"
+        },
+        "message": "=Design the first release.\n\nBrief: {{ $(\"Run Inputs\").first().json.brief }}\n\nDirector's framing:\n{{ $(\"Read The Plan\").first().json.frame }}\n\nMira Castellane's product plan:\n{{ ($(\"Castellane: Prioritise\").first().json.text || \"The product plan is not available. Choose a small first release and state your assumptions.\").replace(/[*_ ]*memory:[\\s\\S]*$/i, \"\").slice(0, $(\"Run Inputs\").first().json.max_context_chars) }}\n\nYour own notes from past projects:\n{{ $(\"Give Each Agent Its Own Notes\").first().json.notes.aldaine }}",
+        "advanced": {
+          "enableStreaming": false,
+          "invokeMode": "allItems",
+          "session": {
+            "session": {
+              "sessionIdType": "customKey",
+              "sessionKey": "=design-team-{{ $execution.id }}-aldaine"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "5f7f96d0-1210-459f-ac77-96192a997506",
+      "name": "Pace 4",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3900,
+        0
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "18295cd1-10c5-43b4-86b8-77ef36a74744",
+      "name": "Check: Wake The Developer?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4200,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $(\"Read The Plan\").first().json.build }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "3be35320-69b1-4a80-9957-ae7ae841542c",
+      "name": "Vale: Build",
+      "type": "n8n-nodes-base.messageAnAgent",
+      "typeVersion": 3.1,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [
+        4500,
+        -300
+      ],
+      "parameters": {
+        "agentSource": "referenced",
+        "agentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_VALE_AGENT_ID"
+        },
+        "message": "=The brief asks for a build. Write the starter code for the first release.\n\nBrief: {{ $(\"Run Inputs\").first().json.brief }}\n\nKenji Aldaine's design:\n{{ ($(\"Aldaine: Design\").first().json.text || \"The design is not available. Build a clean, accessible main screen and state your assumptions.\").replace(/[*_ ]*memory:[\\s\\S]*$/i, \"\").slice(0, $(\"Run Inputs\").first().json.max_context_chars) }}\n\nYour own notes from past projects:\n{{ $(\"Give Each Agent Its Own Notes\").first().json.notes.vale }}",
+        "advanced": {
+          "enableStreaming": false,
+          "invokeMode": "allItems",
+          "session": {
+            "session": {
+              "sessionIdType": "customKey",
+              "sessionKey": "=design-team-{{ $execution.id }}-vale"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "1a81c924-ecad-4389-9d3a-520710e4a39f",
+      "name": "Pace 5",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4800,
+        -300
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $(\"Run Inputs\").first().json.pace_seconds }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "ceb59b4d-2c67-4ead-b894-368c5263ba2f",
+      "name": "Vance: Final Review",
+      "type": "n8n-nodes-base.messageAnAgent",
+      "typeVersion": 3.1,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [
+        5100,
+        0
+      ],
+      "parameters": {
+        "agentSource": "referenced",
+        "agentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "PASTE_VANCE_AGENT_ID"
+        },
+        "message": "=REVIEW the team's work.\n\nBrief: {{ $(\"Run Inputs\").first().json.brief }}\n\nProf. Okafor, research:\n{{ ($(\"Okafor: Research\").first().json.text || \"Not available.\").replace(/[*_ ]*memory:[\\s\\S]*$/i, \"\").slice(0, 1500) }}\n\nMira Castellane, product:\n{{ ($(\"Castellane: Prioritise\").first().json.text || \"Not available.\").replace(/[*_ ]*memory:[\\s\\S]*$/i, \"\").slice(0, 1500) }}\n\nKenji Aldaine, design:\n{{ ($(\"Aldaine: Design\").first().json.text || \"Not available.\").replace(/[*_ ]*memory:[\\s\\S]*$/i, \"\").slice(0, 1500) }}\n\nSoren Vale, build: {{ $(\"Read The Plan\").first().json.build ? \"woken for this brief\" : \"not needed for this brief\" }}\n\nYour own notes from past projects:\n{{ $(\"Give Each Agent Its Own Notes\").first().json.notes.vance }}",
+        "advanced": {
+          "enableStreaming": false,
+          "invokeMode": "allItems",
+          "session": {
+            "session": {
+              "sessionIdType": "customKey",
+              "sessionKey": "=design-team-{{ $execution.id }}-vance"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "f5ee35ef-92f9-4c84-aed6-29ada5224315",
+      "name": "Problem: Brief Too Short",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "Tell the team a little more",
+        "completionMessage": "Write at least one full sentence about what you want to build and who it is for, then try again."
+      }
+    },
+    {
+      "id": "ad04dbbb-7a83-4def-8d54-8c49839ba954",
+      "name": "Prepare Memory Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5400,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const brief = $('Run Inputs').first().json.brief.slice(0, 80);\nfunction safeText(name) {\n  try { return String($(name).first().json.text || ''); } catch (e) { return ''; }\n}\nfunction lesson(t) {\n  const m = [...t.matchAll(/memory:/gi)].pop();\n  if (!m) { return ''; }\n  return t.slice(m.index + 7).replace(/[*_]/g, '').trim().split('\\n')[0].slice(0, 200);\n}\nconst sources = [['vance', 'Vance: Final Review'], ['okafor', 'Okafor: Research'], ['castellane', 'Castellane: Prioritise'], ['aldaine', 'Aldaine: Design'], ['vale', 'Vale: Build']];\nconst rows = sources.map(([agent, name]) => ({ agent, project: brief, note: lesson(safeText(name)) })).filter(r => r.note);\nif (rows.length === 0) { return [{ json: { agent: 'none', project: brief, note: '' } }]; }\nreturn rows.map(r => ({ json: r }));"
+      }
+    },
+    {
+      "id": "8e0f6b41-d783-464e-8fa2-d481899bd22a",
+      "name": "Save Each Agent Memory",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "onError": "continueRegularOutput",
+      "position": [
+        5700,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "design_team_memory"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "agent": "={{ $json.agent }}",
+            "project": "={{ $json.project }}",
+            "note": "={{ $json.note }}"
+          },
+          "schema": [
+            {
+              "id": "agent",
+              "displayName": "agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project",
+              "displayName": "project",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "note",
+              "displayName": "note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "47fd4247-0742-4520-a533-1a5a0179d1e7",
+      "name": "Build Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6000,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const cfg = $('Run Inputs').first().json;\nconst plan = $('Read The Plan').first().json;\nfunction get(name) {\n  try { return $(name).first().json || {}; } catch (e) { return {}; }\n}\nfunction body(j) { return String(j.text || '').replace(/[*_ ]*memory:[\\s\\S]*$/i, '').trim(); }\nfunction esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;'); }\nconst team = [\n  { node: 'Okafor: Research', who: 'Prof. Anselm Okafor', role: 'Director of Research', needed: true },\n  { node: 'Castellane: Prioritise', who: 'Mira Castellane', role: 'Chief Product Strategist', needed: true },\n  { node: 'Aldaine: Design', who: 'Kenji Aldaine', role: 'Design Director', needed: true },\n  { node: 'Vale: Build', who: 'Soren Vale', role: 'Distinguished Engineer', needed: plan.build },\n];\nconst review = get('Vance: Final Review');\nconst warnings = [];\nfunction reason(j) { const e = String(j.error?.message || j.error || ''); return e ? ' Reason: ' + e.slice(0, 140) : ''; }\nif (!plan.frame_ok) { warnings.push('Dr. Vance could not frame the brief, so the team worked from the brief alone.' + reason(get('Vance: Frame The Brief'))); }\nif (!body(review)) { warnings.push('Dr. Vance could not write the final review. Read the sections below directly.' + reason(review)); }\nlet tokens = (get('Vance: Frame The Brief').usage?.totalTokens || 0) + (review.usage?.totalTokens || 0);\nconst sections = team.filter(t => t.needed).map(t => {\n  const j = get(t.node);\n  tokens += j.usage?.totalTokens || 0;\n  const text = body(j);\n  if (!text) { warnings.push(t.who + ' could not finish.' + reason(j)); }\n  return { who: t.who, role: t.role, text };\n});\nconst research = get('Okafor: Research');\nconst papers = [];\nconst updates = [];\nfor (const t of team.concat([{ node: 'Vance: Final Review', who: 'Dr. Imara Vance' }])) {\n  let used = false;\n  for (const call of get(t.node).toolCalls || []) {\n    for (const v of Object.values(call.result?.data || {})) {\n      const first = Array.isArray(v) ? v[0] : null;\n      const res = first?.json || first || {};\n      for (const p of (res.results || [])) { if (!papers.some(x => x.title === p.title)) { papers.push(p); } }\n      if (res.checked_on) {\n        used = true;\n        for (const n of (res.news || []).concat(res.papers || [])) {\n          if (n.title && !updates.some(u => u.title === n.title)) { updates.push({ date: n.date, title: n.title, source: n.doi ? 'paper' : 'headline', seen_by: t.who }); }\n        }\n      }\n    }\n  }\n  if (t.needed !== false && !used && body(get(t.node))) { warnings.push(t.who + ' did not check for recent updates in this run.'); }\n}\nconst researchText = body(research);\nif (researchText && papers.length === 0) { warnings.push('Prof. Okafor found no papers through the search tool, so treat the research section as unsourced.'); }\nconst unmatched = [];\nfor (const m of researchText.matchAll(/\\(([^()]*?(?:19|20)[0-9]{2})\\)/g)) {\n  const cited = m[1].toLowerCase();\n  const surname = cited.trim().split(/[\\s,]/)[0];\n  const titleBit = cited.replace(/,? *(?:19|20)[0-9]{2}$/, '').trim();\n  const known = papers.some(p => String(p.authors).toLowerCase().includes(surname) || String(p.title).toLowerCase().includes(titleBit) || updates.some(u => u.title.toLowerCase().includes(titleBit)));\n  if (surname && !/^[0-9]/.test(surname) && !known) { unmatched.push(m[1]); }\n}\nif (unmatched.length) { warnings.push('These citations do not match any paper the search returned, so ignore them: ' + [...new Set(unmatched)].join('; ')); }\nfunction lum(hex) {\n  const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));\n  return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];\n}\nconst designText = body(get('Aldaine: Design'));\nconst hexes = [...new Set((designText.match(/#[0-9a-fA-F]{6}(?![0-9a-fA-F])/g) || []).map(h => h.toLowerCase()))];\nconst contrast = [];\nfor (let i = 0; i < hexes.length; i++) {\n  for (let j = i + 1; j < hexes.length; j++) {\n    const a = lum(hexes[i]); const b = lum(hexes[j]);\n    contrast.push({ pair: hexes[i] + ' on ' + hexes[j], ratio: Math.round(((Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)) * 10) / 10 });\n  }\n}\nfunction card(title, sub, text) {\n  return '<div style=\"background:#fff;color:#1a1a1a;border:1px solid #ccc;border-radius:8px;padding:14px;margin:14px 0\"><h2 style=\"margin:0;font-size:18px\">' + esc(title) + '</h2><p style=\"margin:0 0 8px;color:#555\"><small>' + esc(sub) + '</small></p><div style=\"white-space:pre-wrap;overflow-wrap:anywhere\">' + esc(text || 'Not completed.') + '</div></div>';\n}\nconst sourceList = papers.map(p => '<li>' + esc(p.title) + ' (' + esc(p.year) + ')' + (p.doi ? ', doi:' + esc(p.doi) : ', no DOI listed') + '</li>').join('');\nconst sourceHtml = papers.length ? '<div style=\"background:#fff;color:#1a1a1a;border:1px solid #ccc;border-radius:8px;padding:14px;margin:14px 0\"><h2 style=\"margin:0 0 6px;font-size:18px\">Sources returned by the search tool</h2><p style=\"margin:0 0 6px;color:#555\"><small>Listed by code from OpenAlex, not written by an agent. Abstracts only.</small></p><ul style=\"margin:0;padding-left:20px\">' + sourceList + '</ul></div>' : '';\nconst updateList = updates.slice(0, 12).map(u => '<li>' + esc(u.date) + ' (' + esc(u.source) + '): ' + esc(u.title) + '</li>').join('');\nconst updateHtml = updates.length ? '<details style=\"margin:14px 0\"><summary>Live updates the team checked in this run</summary><ul>' + updateList + '</ul></details>' : '';\nconst contrastRows = contrast.map(c => '<li>' + esc(c.pair) + ': ' + c.ratio + ':1 ' + (c.ratio >= 4.5 ? '(passes AA for normal text)' : c.ratio >= 3 ? '(large text only)' : '(fails AA)') + '</li>').join('');\nconst contrastHtml = contrast.length ? '<details style=\"margin:14px 0\"><summary>Measured contrast of every colour pair in the design</summary><ul>' + contrastRows + '</ul></details>' : '';\nconst cards = [card('Dr. Imara Vance', 'Studio Director: final review', body(review))].concat(sections.map(s => card(s.who, s.role, s.text))).join('');\nconst warnHtml = warnings.length ? '<div style=\"background:#fff4e0;color:#5c3a00;border-radius:8px;padding:10px 14px;margin:14px 0\"><b>Please note</b><ul style=\"margin:6px 0\">' + warnings.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>' : '';\nconst devLine = plan.build ? 'Soren Vale was woken because the brief asks for a build.' : 'Soren Vale stayed on standby because the brief does not ask for a build.';\nconst report_html = '<div style=\"max-width:800px;margin:0 auto;text-align:left;font-family:system-ui,sans-serif;line-height:1.5\"><h1 style=\"font-size:22px;margin:0 0 6px\">Design Team report</h1><p style=\"margin:0 0 6px\">' + esc(cfg.brief) + '</p><p style=\"margin:0\"><small>' + esc(devLine) + ' The team members are fictional AI characters. Research plans are proposals: no real people were interviewed. Check everything before you use it.</small></p>' + warnHtml + cards + sourceHtml + updateHtml + contrastHtml + '</div>';\nreturn [{ json: { brief: cfg.brief, build: plan.build, frame: plan.frame, warnings, tokens, sections, papers, updates, unmatched_citations: unmatched, contrast, review: body(review), report_html } }];"
+      }
+    },
+    {
+      "id": "9c1d0e25-6b07-4265-b337-cb21afcdbd8a",
+      "name": "Show Report",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        6300,
+        0
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "={{ $json.report_html }}"
+      }
+    },
+    {
+      "id": "59dae484-884a-4627-9041-619c359a08ca",
+      "name": "Sticky Note 14234d98",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -96
+      ],
+      "parameters": {
+        "content": "## Design Team\nFive fictional AI specialists work on one brief, each as its own n8n Agent with its own memory.\n\n**To use it:** open /form/design-team, describe what you want, press Start and wait on the page.\n\nThe run never stops for a question. If one specialist fails, the others continue and the report says so.",
+        "color": 4,
+        "width": 464,
+        "height": 224
+      }
+    },
+    {
+      "id": "5d8ce71c-78c1-485a-8115-647fae0ebe43",
+      "name": "Sticky Note 12cd042f",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -96
+      ],
+      "parameters": {
+        "content": "## Separate memory\nEach agent has its own n8n Agent memory. Long-term notes are filtered by agent name in code, so no agent sees another one's notes.",
+        "color": 7,
+        "width": 464,
+        "height": 224
+      }
+    },
+    {
+      "id": "9f189c52-33c2-4145-9a8b-7b9c816d2670",
+      "name": "Sticky Note 9ee9eabe",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        -96
+      ],
+      "parameters": {
+        "content": "## The studio\nDr. Vance frames the brief, Prof. Okafor researches, Mira Castellane prioritises, Kenji Aldaine designs. Pauses keep the run inside the Groq free tier.",
+        "color": 7,
+        "width": 2560,
+        "height": 256
+      }
+    },
+    {
+      "id": "a1dc93d1-e9eb-4824-a30f-70797c39f357",
+      "name": "Sticky Note f7ea9c07",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4176,
+        -400
+      ],
+      "parameters": {
+        "content": "## Developer on standby\nSoren Vale is woken only when Dr. Vance reads the brief as a build. Otherwise this step is skipped.",
+        "color": 7,
+        "width": 768,
+        "height": 528
+      }
+    },
+    {
+      "id": "9aff7ae2-7edd-4236-827a-fe3a459cd764",
+      "name": "Sticky Note c8926895",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5072,
+        -96
+      ],
+      "parameters": {
+        "content": "## Review and report\nDr. Vance reviews the work. Each agent saves one lesson to its own notes. The report opens on the form page.",
+        "color": 7,
+        "width": 1360,
+        "height": 256
+      }
+    }
+  ],
+  "connections": {
+    "Form: Start Here": {
+      "main": [
+        [
+          {
+            "node": "Run Inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Inputs": {
+      "main": [
+        [
+          {
+            "node": "Check: Clear Brief?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Clear Brief?": {
+      "main": [
+        [
+          {
+            "node": "Load Team Memory",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Problem: Brief Too Short",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Team Memory": {
+      "main": [
+        [
+          {
+            "node": "Give Each Agent Its Own Notes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Give Each Agent Its Own Notes": {
+      "main": [
+        [
+          {
+            "node": "Vance: Frame The Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vance: Frame The Brief": {
+      "main": [
+        [
+          {
+            "node": "Read The Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read The Plan": {
+      "main": [
+        [
+          {
+            "node": "Pace 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace 1": {
+      "main": [
+        [
+          {
+            "node": "Okafor: Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Okafor: Research": {
+      "main": [
+        [
+          {
+            "node": "Pace 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace 2": {
+      "main": [
+        [
+          {
+            "node": "Castellane: Prioritise",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Castellane: Prioritise": {
+      "main": [
+        [
+          {
+            "node": "Pace 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace 3": {
+      "main": [
+        [
+          {
+            "node": "Aldaine: Design",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aldaine: Design": {
+      "main": [
+        [
+          {
+            "node": "Pace 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace 4": {
+      "main": [
+        [
+          {
+            "node": "Check: Wake The Developer?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check: Wake The Developer?": {
+      "main": [
+        [
+          {
+            "node": "Vale: Build",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Vance: Final Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vale: Build": {
+      "main": [
+        [
+          {
+            "node": "Pace 5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pace 5": {
+      "main": [
+        [
+          {
+            "node": "Vance: Final Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vance: Final Review": {
+      "main": [
+        [
+          {
+            "node": "Prepare Memory Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Memory Rows": {
+      "main": [
+        [
+          {
+            "node": "Save Each Agent Memory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Each Agent Memory": {
+      "main": [
+        [
+          {
+            "node": "Build Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Report": {
+      "main": [
+        [
+          {
+            "node": "Show Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}

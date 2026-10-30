@@ -1,7 +1,7 @@
 # Agentic AIs
 
-Systems of several agents working together go in this folder, one subfolder per project. Nothing is built yet.
+Systems of several agents working together go in this folder, one subfolder per project.
 
 | Project | Status | Summary |
 |---|---|---|
-| 01 \[Agentic AI\] Design Team | Planned, not built. No folder yet. | A lead agent routes a brief between a research agent, a product agent, a design agent and a standby developer agent that wakes only when the brief asks for a built website or app. A human approves after research and after feature prioritisation. It does not replace user research or a developer. |
+| [01 \[Agentic AI\] Design Team](01-design-team/) | Prototype, tested on two sample briefs. | Five fictional specialists take one brief through research, priorities, design, optional starter code and review, with no stops. It does not replace user research or a developer. |

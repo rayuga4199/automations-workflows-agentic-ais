@@ -1,0 +1,3 @@
+- [Volunteer admin friction drives failure, not borrower UX](lesson_volunteer_admin_friction.md) — Keep volunteer workflows simple; catalogue rot is the top failure mode
+- [First session is load-bearing](lesson_first_session_is_load_bearing.md) — Session one emotional safety predicts return; design it as a distinct, scripted artifact
+- [Session one emotional safety is load-bearing](lesson_session_one_emotional_safety.md) — Design Session One as a distinct artefact; it determines retention more than any other lever
