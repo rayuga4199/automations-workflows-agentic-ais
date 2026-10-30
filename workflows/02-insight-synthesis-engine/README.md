@@ -1,5 +1,7 @@
 # Insight Synthesis Engine
 
+**Type:** Workflow
+
 An n8n workflow that turns mixed research material into themes and insights. A researcher pastes interview transcripts, blog posts, notes and web links into a one-page form. The workflow hides the names they list, sorts the text into themes, writes one insight per theme and shows a report with the exact quotes behind each insight. The researcher checks every insight before using it.
 
 **Status (2026-10-30):** built, published on the author's local n8n, and tested on small synthetic samples. It has not been tested at scale or on real interview data. See [Limitations](#limitations).

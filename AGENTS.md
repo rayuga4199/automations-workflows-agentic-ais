@@ -15,6 +15,7 @@ Then, for each project folder:
 6. `workflow.json`, `sample-input/`, `sample-output/`: the artefacts themselves.
 
 ## Rules
+- **Project type:** every project has one label: Workflow, AI agent or Agentic AI. Use the `Type` line at the top of its README. Do not call a workflow an agent.
 - **Source of truth:** if two files disagree, the order of trust is `workflow.json` and `sample-output/` (artefacts), then `eval.md`, then `README.md`, then `PORTFOLIO_BRIEF.md`. Report the disagreement; do not pick the nicer number.
 - **Do not invent.** No user counts, time-saved figures, accuracy figures, testimonials or features that are not in the files. If a fact is missing, say it is missing.
 - **Respect "not built".** Anything listed under "Not built" or "Limitations" must not be described as working. The Zotero push and the conference call-for-papers branch do not exist yet.

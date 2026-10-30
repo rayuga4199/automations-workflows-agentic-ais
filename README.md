@@ -12,14 +12,16 @@ If you are an AI agent, read [AGENTS.md](AGENTS.md) first.
 | [agentic-ais/](agentic-ais/) | Systems of several agents working together. | 0 built, 1 planned |
 
 ## Projects
+Every project is labelled with one type: Workflow, AI agent or Agentic AI. The label is in this table, at the top of the project's README and brief, and in its name in n8n, for example `[Workflow] Insight Synthesis Engine`.
+
 Four projects, built in this order. The first two exist. Do not describe a planned project as working.
 
-| # | Project | Kind | Status | One line |
+| # | Project | Type | Status | One line |
 |---|---|---|---|---|
-| 1 | [Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | workflow (n8n) | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
-| 2 | [Insight Synthesis Engine](workflows/02-insight-synthesis-engine/) | workflow (n8n) | Prototype. Built and stress tested on small synthetic samples. Not tested at scale or on real interview data. | A one-page form takes interview transcripts, pasted text and web links, hides listed names, sorts the text into themes and writes insights with the exact quotes behind them. |
-| 3 | Research Writer | agent (n8n) | Planned, not built. | One agent for research and writing. It searches papers, keeps a quote ledger, flags uncited claims and suggests rewording of the researcher's own sentences. It never writes content for him and never invents a reference. |
-| 4 | Design Team | agentic AI (n8n) | Planned, not built. | A lead agent coordinates a research agent, a product agent, a design agent and a standby developer agent to turn a brief into a researched, prioritised design and, if needed, a code scaffold. A human approves at two points. |
+| 1 | [Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | Workflow | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
+| 2 | [Insight Synthesis Engine](workflows/02-insight-synthesis-engine/) | Workflow | Prototype. Built and stress tested on small synthetic samples. Not tested at scale or on real interview data. | A one-page form takes interview transcripts, pasted text and web links, hides listed names, sorts the text into themes and writes insights with the exact quotes behind them. |
+| 3 | Research Writer | AI agent | Planned, not built. | One agent for research and writing. It searches papers, keeps a quote ledger, flags uncited claims and suggests rewording of the researcher's own sentences. It never writes content for him and never invents a reference. |
+| 4 | Design Team | Agentic AI | Planned, not built. | A lead agent coordinates a research agent, a product agent, a design agent and a standby developer agent to turn a brief into a researched, prioritised design and, if needed, a code scaffold. A human approves at two points. |
 
 ## Where to find what, per project
 | Question | File |

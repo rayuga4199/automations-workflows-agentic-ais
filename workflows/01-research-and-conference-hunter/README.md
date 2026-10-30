@@ -1,5 +1,7 @@
 # Research and Conference Hunter
 
+**Type:** Workflow
+
 An n8n workflow that helps a researcher run the **screening stage of a systematic literature review (SLR)**. It either searches for papers on a topic or takes a list the researcher already has, removes duplicates, screens every paper against written inclusion and exclusion criteria with a stated reason, counts the papers for a PRISMA flow diagram, and can fill a small facts table per paper. A token budget keeps AI cost under control. A human checks every result.
 
 **Status (2026-10-29):** the paper-side workflow is built, tested and exported (`workflow.json`). Not built: the Zotero push and the conference call-for-papers branch, even though the project name mentions conferences. Not yet done: no screenshot. See [Status and roadmap](#status-and-roadmap).

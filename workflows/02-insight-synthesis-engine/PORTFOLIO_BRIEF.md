@@ -1,9 +1,11 @@
 # Portfolio brief: Insight Synthesis Engine
 
+**Type:** Workflow
+
 For the person or AI agent writing the portfolio page for this project. Everything below is checked against the files in this folder. Do not add claims that are not here.
 
 ## One-line pitch
-A one-page form where a researcher pastes interview transcripts, blogs, notes and web links, and gets back themes and insights with the exact quotes behind them, with participant names hidden before any AI sees the text.
+An n8n workflow behind a one-page form where a researcher pastes interview transcripts, blogs, notes and web links, and gets back themes and insights with the exact quotes behind them, with participant names hidden before any AI sees the text.
 
 ## Who made it and why
 - Author: Yash Bhagat, a design researcher.

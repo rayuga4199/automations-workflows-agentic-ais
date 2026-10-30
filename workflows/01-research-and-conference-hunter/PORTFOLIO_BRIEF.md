@@ -1,5 +1,7 @@
 # Portfolio brief: Research and Conference Hunter
 
+**Type:** Workflow
+
 For the person or AI agent writing the portfolio page for this project. Everything below is checked against the files in this folder. Where a claim has a source, the source is named. Do not add claims that are not here.
 
 ## One-line pitch
