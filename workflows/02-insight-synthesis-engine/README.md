@@ -1,4 +1,4 @@
-# Insight Synthesis Engine
+# [Workflow] Insight Synthesis Engine
 
 **Type:** Workflow
 

@@ -1,4 +1,4 @@
-# Portfolio brief: Research and Conference Hunter
+# Portfolio brief: [Workflow] Research and Conference Hunter
 
 **Type:** Workflow
 

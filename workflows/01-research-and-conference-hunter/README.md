@@ -1,4 +1,4 @@
-# Research and Conference Hunter
+# [Workflow] Research and Conference Hunter
 
 **Type:** Workflow
 

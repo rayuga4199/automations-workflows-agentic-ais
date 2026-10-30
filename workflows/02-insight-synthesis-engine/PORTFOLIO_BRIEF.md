@@ -1,4 +1,4 @@
-# Portfolio brief: Insight Synthesis Engine
+# Portfolio brief: [Workflow] Insight Synthesis Engine
 
 **Type:** Workflow
 
