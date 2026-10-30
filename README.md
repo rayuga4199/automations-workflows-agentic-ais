@@ -8,7 +8,7 @@ If you are an AI agent, read [AGENTS.md](AGENTS.md) first.
 | Folder | What goes here | Projects now |
 |---|---|---|
 | [workflows/](workflows/) | Fixed-step automations built in n8n. The steps are drawn in advance; an AI only does bounded jobs inside them, and a human checks the output. | 2 built |
-| [agents/](agents/) | A single AI that picks its own tools and steps. | 1 built, docs not uploaded |
+| [agents/](agents/) | A single AI that picks its own tools and steps. | 1 draft |
 | [agentic-ais/](agentic-ais/) | Systems of several agents working together. | 1 built |
 
 ## Projects
@@ -20,7 +20,7 @@ Four projects, built in this order. Do not describe anything as working beyond i
 |---|---|---|---|---|
 | 1 | [\[Workflow\] Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | Workflow | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
 | 2 | [\[Workflow\] Insight Synthesis Engine](workflows/02-insight-synthesis-engine/) | Workflow | Prototype. Built and stress tested on small synthetic samples. Not tested at scale or on real interview data. | A one-page form takes interview transcripts, pasted text and web links, hides listed names, sorts the text into themes and writes insights with the exact quotes behind them. |
-| 3 | \[AI Agent\] Research Writer | AI agent | Draft in n8n, seeded-claim test passed, other skills untested. Not in this repo yet. | One agent for research and writing. It searches papers, keeps a quote ledger, flags uncited claims and suggests rewording of the researcher's own sentences. It never writes content for him and never invents a reference. |
+| 3 | [\[AI Agent\] Research Writer](agents/01-research-writer/) | AI agent | Unpublished draft. Seeded-claim test passed; several skills untested. | One agent for research and writing. It searches papers, keeps a quote ledger, flags uncited claims and suggests rewording of the researcher's own sentences. It never writes content for him and never invents a reference. |
 | 4 | [\[Agentic AI\] Design Team](agentic-ais/01-design-team/) | Agentic AI | Prototype. Tested on two sample briefs. | Five fictional AI specialists, each with a personality, knowledge, its own memory and live web search, turn one sentence into research, priorities, a design, a review and optional starter code. Runs in Claude Code on a Claude plan. |
 
 ## Where to find what, per project

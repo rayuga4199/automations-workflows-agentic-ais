@@ -1,0 +1,221 @@
+{
+  "name": "[AI Agent Helper] Research Writer Add Quote",
+  "nodes": [
+    {
+      "id": "f9935f38-1c3c-43f7-bf2b-47aab92d54a1",
+      "name": "Form: Add A Quote",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "authentication": "none",
+        "formTitle": "Add a quote to the ledger",
+        "formDescription": "Copy the quote exactly from the paper. Only you can add to the ledger. The Research Writer agent can read it but cannot change it.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Source title",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Exact quote",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Page",
+              "fieldType": "text",
+              "placeholder": "Page number, or abstract"
+            },
+            {
+              "fieldLabel": "Authors",
+              "fieldType": "text"
+            },
+            {
+              "fieldLabel": "Year",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "DOI",
+              "fieldType": "text",
+              "placeholder": "10.1234/example"
+            },
+            {
+              "fieldLabel": "Note",
+              "fieldType": "text",
+              "placeholder": "Optional: why this quote matters"
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "add-quote",
+          "buttonLabel": "Save quote",
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "cccb8adc-709b-4f46-a1f4-fe0d2c9fa746",
+      "name": "Save Quote",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "research_ledger"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "source_title": "={{ $json[\"Source title\"] }}",
+            "quote": "={{ $json[\"Exact quote\"] }}",
+            "page": "={{ $json[\"Page\"] }}",
+            "authors": "={{ $json[\"Authors\"] }}",
+            "year": "={{ $json[\"Year\"] }}",
+            "doi": "={{ $json[\"DOI\"] }}",
+            "note": "={{ $json[\"Note\"] }}"
+          },
+          "schema": [
+            {
+              "id": "source_title",
+              "displayName": "source_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quote",
+              "displayName": "quote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "page",
+              "displayName": "page",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "authors",
+              "displayName": "authors",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "year",
+              "displayName": "year",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "doi",
+              "displayName": "doi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "note",
+              "displayName": "note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "0ca4961f-2ca5-46b4-9dd4-31ee9de52633",
+      "name": "Show Saved",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        600,
+        0
+      ],
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "text",
+        "completionTitle": "Saved",
+        "completionMessage": "The quote is in your ledger. Open the form again to add another."
+      }
+    },
+    {
+      "id": "9bdb5af6-6836-4897-aedb-3995b1ca6721",
+      "name": "Sticky Note 3ad508af",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -96
+      ],
+      "parameters": {
+        "content": "## Add a quote\nThe only way into the ledger. A person pastes the quote, so the agent cannot invent one.",
+        "color": 4,
+        "width": 768,
+        "height": 224
+      }
+    }
+  ],
+  "connections": {
+    "Form: Add A Quote": {
+      "main": [
+        [
+          {
+            "node": "Save Quote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Quote": {
+      "main": [
+        [
+          {
+            "node": "Show Saved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {}
+}
