@@ -1,4 +1,4 @@
-# Evaluation: Insight Synthesis Engine
+# Evaluation: [Workflow] Insight Synthesis Engine
 
 All tests ran on 2026-10-30 on n8n 2.45.6 (self-hosted, Docker) with Groq `openai/gpt-oss-120b` on the free tier. Execution numbers are from the author's local n8n instance.
 
