@@ -1,4 +1,4 @@
-# Eval: [Workflow] Research and Conference Hunter
+# Eval: [Workflow] Literature Review Screener
 
 **Status (2026-10-29):** seeded-pool test run twice (free keyword screener, then Groq AI screener), plus functional tests of the three input modes, a fresh-import test and the extraction step. All on one local n8n 2.45.6 instance. Terminology note: Runs 1 and 2 were executed before two fields were renamed. Then `seed_dois` was `my_dois`, `is_seed` was `in_my_list`, and the metrics `seeds_*` and `seed_recall_percent` were `my_list_*` and `my_list_kept_percent`. Same meaning.
 
@@ -12,7 +12,7 @@ Original (2026-10-17): rerun the ICWIHI 2025 SLR question and recover at least 8
 New criterion: mix the 35 papers into a pool of unrelated search results, run the screener, and report (a) **seed recall**: share of the 35 kept as include or maybe, target 80% or more, and (b) the share of the other papers rejected, so a screener that keeps everything cannot pass.
 
 ## Method
-1. Workflow `[Workflow] Research and Conference Hunter` (named `P1 Research and Conference Hunter (stage 1)` during these runs) (`workflow.json`), switch `use_llm` in Run Inputs.
+1. Workflow `[Workflow] Literature Review Screener` (named `P1 Research and Conference Hunter (stage 1)` during these runs) (`workflow.json`), switch `use_llm` in Run Inputs.
 2. `my_dois` (then called `seed_dois`) holds the 35 DOIs. One OpenAlex call fetches them first, so the paper cap cannot cut them.
 3. `search_query` is run for 3 pages of 100 (300 papers), from 2007.
 4. DOIs are lowercased, duplicates removed on DOI, then each paper is screened on title and abstract against the written criteria (`inclusion_criteria`, `exclusion_criteria` in Run Inputs, taken from the ICWIHI 2025 paper).

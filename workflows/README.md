@@ -4,7 +4,7 @@ Fixed-step automations built in n8n. The steps are drawn in advance; an AI only 
 
 | Project | Status | Summary |
 |---|---|---|
-| [01 \[Workflow\] Research and Conference Hunter](01-research-and-conference-hunter/) | Paper side built and tested. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or from your own DOI list, with token budget, PRISMA counts and an optional facts table. |
+| [01 \[Workflow\] Literature Review Screener](01-research-and-conference-hunter/) | Paper side built and tested. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or from your own DOI list, with token budget, PRISMA counts and an optional facts table. |
 | [02 \[Workflow\] Insight Synthesis Engine](02-insight-synthesis-engine/) | Built and stress tested on small synthetic samples. Not tested at scale or on real interview data. | A form takes transcripts, pasted text and web links, hides listed names, and returns themes and insights with exact quotes. |
 
 ## Folder standard

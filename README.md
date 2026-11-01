@@ -18,7 +18,7 @@ Four projects, built in this order. Do not describe anything as working beyond i
 
 | # | Project | Type | Status | One line |
 |---|---|---|---|---|
-| 1 | [\[Workflow\] Research and Conference Hunter](workflows/01-research-and-conference-hunter/) | Workflow | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
+| 1 | [\[Workflow\] Literature Review Screener](workflows/01-research-and-conference-hunter/) | Workflow | Prototype. Paper side built, tested and evaluated on one review. Zotero push and conference branch not built. | Screens papers for a systematic literature review from a topic search or your own DOI list, with a reason for each decision, PRISMA counts, an optional facts table and a token budget. |
 | 2 | [\[Workflow\] Insight Synthesis Engine](workflows/02-insight-synthesis-engine/) | Workflow | Prototype. Built and stress tested on small synthetic samples. Not tested at scale or on real interview data. | A one-page form takes interview transcripts, pasted text and web links, hides listed names, sorts the text into themes and writes insights with the exact quotes behind them. |
 | 3 | [\[AI Agent\] Research Writer](agents/01-research-writer/) | AI agent | Unpublished draft. Seeded-claim test passed; several skills untested. | One agent for research and writing. It searches papers, keeps a quote ledger, flags uncited claims and suggests rewording of the researcher's own sentences. It never writes content for him and never invents a reference. |
 | 4 | [\[Agentic AI\] Design Team](agentic-ais/01-design-team/) | Agentic AI | Prototype. Tested on two sample briefs. | Five fictional AI specialists, each with a personality, knowledge, its own memory and live web search, turn one sentence into research, priorities, a design, a review and optional starter code. Runs in Claude Code on a Claude plan. |
@@ -27,6 +27,7 @@ Four projects, built in this order. Do not describe anything as working beyond i
 | Question | File |
 |---|---|
 | How do I run it, step by step? | [MANUAL.md](MANUAL.md) |
+| How was the AI directed, and what goes on the portfolio page? | [PORTFOLIO_NOTES.md](PORTFOLIO_NOTES.md) |
 | What is it and how does it work? | `README.md` in the project folder |
 | What can I safely say about it? | `PORTFOLIO_BRIEF.md` |
 | How well does it work, and how was that measured? | `eval.md` |
@@ -34,10 +35,10 @@ Four projects, built in this order. Do not describe anything as working beyond i
 | Real example inputs and outputs | `sample-input/`, `sample-output/` |
 
 ## Standard for a shipped project
-`README.md`, `PORTFOLIO_BRIEF.md`, `workflow.json` (credentials stripped), `sample-input/`, `sample-output/`, `eval.md`, `screenshot.png`. It runs on the bundled sample data with credentials as the only edit. No copyrighted PDFs. Anything missing is listed as missing in the project README.
+`README.md`, `PORTFOLIO_BRIEF.md`, `workflow.json` (credentials stripped), `sample-input/`, `sample-output/`, `eval.md`, `screenshots/`. It runs on the bundled sample data with credentials as the only edit. No copyrighted PDFs. Anything missing is listed as missing in the project README.
 
 ## Secrets
 Credentials are stripped from every export and never committed. See [SANITIZATION.md](SANITIZATION.md) for the checklist and the secret-scan log. Copy `.env.example` to `.env` (git-ignored) for local values. Enable the secret-scan hook once per clone: `git config core.hooksPath .githooks` (needs [gitleaks](https://github.com/gitleaks/gitleaks)).
 
 ## License
-Not yet decided. Until one is added, all rights are reserved by the author.
+[MIT](LICENSE). The license covers the author's own work. Quoted paper abstracts and web text in the sample files belong to their authors.

@@ -4,7 +4,7 @@ How to run each project, in order. For depth, see the README in each project fol
 
 **Before you start:** open Docker, then open n8n at `http://localhost:5678`. Projects 1 to 3 need it. In the two workflow tables, the steps marked "does it for you" need no input.
 
-## 1. [Workflow] Research and Conference Hunter
+## 1. [Workflow] Literature Review Screener
 **You use:** the `Run Inputs` node. Press **Execute workflow** to run.
 
 | Order | Node | What you do |

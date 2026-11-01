@@ -1,4 +1,4 @@
-# Portfolio brief: [Workflow] Research and Conference Hunter
+# Portfolio brief: [Workflow] Literature Review Screener
 
 **Type:** Workflow
 
