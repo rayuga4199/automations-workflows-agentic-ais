@@ -3,7 +3,7 @@
 You are probably here to understand the work and write about it (for example a portfolio page), or to reproduce or extend a workflow. This file tells you how to read the repo and what you may and may not claim.
 
 ## What this repo is
-A collection of projects by one researcher (Yash Bhagat), in three folders: `workflows/` (n8n automations), `agents/` (single tool-using AI, empty), `agentic-ais/` (multi-agent systems, empty). Four projects are in this repo: `workflows/01-research-and-conference-hunter/`, `workflows/02-insight-synthesis-engine/` and `agentic-ais/01-design-team/`. `agents/01-research-writer/` is an unpublished draft, so describe it only as its README does.
+A collection of projects by one researcher (Yash Bhagat), in three folders: `workflows/` (n8n automations), `agents/` (single tool-using AI), `agentic-ais/` (multi-agent systems). Four projects are in this repo: `workflows/01-research-and-conference-hunter/`, `workflows/02-insight-synthesis-engine/`, `agents/01-research-writer/` and `agentic-ais/01-design-team/`. `agents/01-research-writer/` is an unpublished draft, so describe it only as its README does.
 
 ## How to read it
 1. This file.

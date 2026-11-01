@@ -26,7 +26,8 @@ Four projects, built in this order. Do not describe anything as working beyond i
 ## Where to find what, per project
 | Question | File |
 |---|---|
-| What is it, how does it work, how do I run it? | `README.md` in the project folder |
+| How do I run it, step by step? | [MANUAL.md](MANUAL.md) |
+| What is it and how does it work? | `README.md` in the project folder |
 | What can I safely say about it? | `PORTFOLIO_BRIEF.md` |
 | How well does it work, and how was that measured? | `eval.md` |
 | The workflow itself | `workflow.json` (import into n8n) |

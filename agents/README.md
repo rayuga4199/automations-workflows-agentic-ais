@@ -1,6 +1,6 @@
 # Agents
 
-One AI that chooses its own tools and steps goes in this folder, one subfolder per project. Nothing is built yet.
+One AI that chooses its own tools and steps goes in this folder, one subfolder per project.
 
 | Project | Status | Summary |
 |---|---|---|
