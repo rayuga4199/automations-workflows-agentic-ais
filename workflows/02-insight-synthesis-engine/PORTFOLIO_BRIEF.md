@@ -62,8 +62,8 @@ An n8n workflow behind a one-page form where a researcher pastes interview trans
 8. Link to the repo and `workflow.json`.
 
 ## Assets
-Available: `sample-output/form-page.jpg`, `sample-output/report-page.jpg` (from run 34), `sample-output/report.html`, the Mermaid diagram in `README.md`, sample inputs and outputs, `eval.md`.
-Missing: a screenshot of the n8n canvas, a demo video. Do not reference them as if they exist.
+Available: `sample-output/form-page.jpg`, `sample-output/report-page.jpg` (from run 34), `sample-output/report.html`, `screenshots/canvas-full.jpg` and four stage images of the n8n canvas, the Mermaid diagram in `README.md`, sample inputs and outputs, `eval.md`.
+Missing: a demo video. Do not reference them as if they exist.
 
 ## Tone
 Plain, specific, first person singular or neutral. No hype words. Numbers always come with their caveat.

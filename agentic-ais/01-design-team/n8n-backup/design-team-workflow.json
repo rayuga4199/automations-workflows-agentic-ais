@@ -43,7 +43,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        300,
+        304,
         0
       ],
       "parameters": {
@@ -79,7 +79,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        600,
+        608,
         0
       ],
       "parameters": {
@@ -111,7 +111,7 @@
       "alwaysOutputData": true,
       "onError": "continueRegularOutput",
       "position": [
-        900,
+        912,
         0
       ],
       "parameters": {
@@ -131,7 +131,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1200,
+        1216,
         0
       ],
       "parameters": {
@@ -150,7 +150,7 @@
       "waitBetweenTries": 5000,
       "onError": "continueRegularOutput",
       "position": [
-        1500,
+        1504,
         0
       ],
       "parameters": {
@@ -179,7 +179,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1800,
+        1936,
         0
       ],
       "parameters": {
@@ -194,7 +194,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2100,
+        2240,
         0
       ],
       "parameters": {
@@ -213,7 +213,7 @@
       "waitBetweenTries": 5000,
       "onError": "continueRegularOutput",
       "position": [
-        2400,
+        2544,
         0
       ],
       "parameters": {
@@ -242,7 +242,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2700,
+        2976,
         0
       ],
       "parameters": {
@@ -261,7 +261,7 @@
       "waitBetweenTries": 5000,
       "onError": "continueRegularOutput",
       "position": [
-        3000,
+        3280,
         0
       ],
       "parameters": {
@@ -290,7 +290,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        3300,
+        3712,
         0
       ],
       "parameters": {
@@ -309,7 +309,7 @@
       "waitBetweenTries": 5000,
       "onError": "continueRegularOutput",
       "position": [
-        3600,
+        4016,
         0
       ],
       "parameters": {
@@ -338,7 +338,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        3900,
+        4448,
         0
       ],
       "parameters": {
@@ -353,7 +353,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4200,
+        4688,
         0
       ],
       "parameters": {
@@ -387,8 +387,8 @@
       "waitBetweenTries": 5000,
       "onError": "continueRegularOutput",
       "position": [
-        4500,
-        -300
+        5008,
+        -304
       ],
       "parameters": {
         "agentSource": "referenced",
@@ -416,8 +416,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        4800,
-        -300
+        5440,
+        -304
       ],
       "parameters": {
         "resume": "timeInterval",
@@ -436,7 +436,7 @@
       "waitBetweenTries": 5000,
       "onError": "continueRegularOutput",
       "position": [
-        5100,
+        5680,
         0
       ],
       "parameters": {
@@ -465,8 +465,8 @@
       "type": "n8n-nodes-base.form",
       "typeVersion": 2.5,
       "position": [
-        900,
-        300
+        912,
+        304
       ],
       "parameters": {
         "operation": "completion",
@@ -481,7 +481,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5400,
+        6112,
         0
       ],
       "parameters": {
@@ -497,7 +497,7 @@
       "typeVersion": 1.1,
       "onError": "continueRegularOutput",
       "position": [
-        5700,
+        6416,
         0
       ],
       "parameters": {
@@ -553,7 +553,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6000,
+        6720,
         0
       ],
       "parameters": {
@@ -568,7 +568,7 @@
       "type": "n8n-nodes-base.form",
       "typeVersion": 2.5,
       "position": [
-        6300,
+        7024,
         0
       ],
       "parameters": {
@@ -583,8 +583,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -32,
-        -96
+        0,
+        -320
       ],
       "parameters": {
         "content": "## Design Team\nFive fictional AI specialists work on one brief, each as its own n8n Agent with its own memory.\n\n**To use it:** open /form/design-team, describe what you want, press Start and wait on the page.\n\nThe run never stops for a question. If one specialist fails, the others continue and the report says so.",
@@ -600,13 +600,13 @@
       "typeVersion": 1,
       "position": [
         864,
-        -96
+        -176
       ],
       "parameters": {
         "content": "## Separate memory\nEach agent has its own n8n Agent memory. Long-term notes are filtered by agent name in code, so no agent sees another one's notes.",
         "color": 7,
-        "width": 464,
-        "height": 224
+        "width": 560,
+        "height": 336
       }
     },
     {
@@ -616,13 +616,13 @@
       "typeVersion": 1,
       "position": [
         1472,
-        -96
+        -176
       ],
       "parameters": {
         "content": "## The studio\nDr. Vance frames the brief, Prof. Okafor researches, Mira Castellane prioritises, Kenji Aldaine designs. Pauses keep the run inside the Groq free tier.",
         "color": 7,
-        "width": 2560,
-        "height": 256
+        "width": 3120,
+        "height": 440
       }
     },
     {
@@ -631,14 +631,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4176,
-        -400
+        4640,
+        -480
       ],
       "parameters": {
         "content": "## Developer on standby\nSoren Vale is woken only when Dr. Vance reads the brief as a build. Otherwise this step is skipped.",
         "color": 7,
-        "width": 768,
-        "height": 528
+        "width": 960,
+        "height": 656
       }
     },
     {
@@ -647,14 +647,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        5072,
-        -96
+        5648,
+        -176
       ],
       "parameters": {
         "content": "## Review and report\nDr. Vance reviews the work. Each agent saves one lesson to its own notes. The report opens on the form page.",
         "color": 7,
-        "width": 1360,
-        "height": 256
+        "width": 1552,
+        "height": 400
       }
     }
   ],

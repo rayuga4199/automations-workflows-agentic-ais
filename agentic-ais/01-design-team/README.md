@@ -80,3 +80,11 @@ Real examples are in [reports/](reports/): a website with starter code, and a se
 
 ## n8n backup
 [n8n-backup/](n8n-backup/) holds a form-based version of the same team for n8n, on Groq's free tier. It needs a Groq credential and the five agents recreated in n8n, then their ids pasted into the workflow. Tests are in `eval.md`. Groq's free tier allows 200,000 tokens a day, and a run used 25,051 to 49,507.
+
+Canvas images of the backup, not the main version:
+- [The full canvas](n8n-backup/screenshots/canvas-full.jpg)
+- [Start and memory](n8n-backup/screenshots/canvas-1-start-and-memory.jpg)
+- [Frame and research](n8n-backup/screenshots/canvas-2-frame-and-research.jpg)
+- [Prioritise and design](n8n-backup/screenshots/canvas-3-prioritise-and-design.jpg)
+- [Developer on standby](n8n-backup/screenshots/canvas-4-developer-on-standby.jpg)
+- [Review and report](n8n-backup/screenshots/canvas-5-review-and-report.jpg)

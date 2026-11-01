@@ -1,0 +1,32 @@
+Test draft, written by the builder. Sentences 2, 4, 6, 8, 10, 12, 14, 16, 27 and 30 are backed by the sample ledger. The other 20 are seeded unsupported claims.
+
+1. Mixed reality companions reduce loneliness in older adults by 40 percent.
+2. Augmented reality has been used in solutions that reduce the difficulties of human navigation.
+3. Lynam et al. (2024) showed that AR navigation doubles walking speed.
+4. Presenting too much visual information can overload a learner's cognitive capacity.
+5. Albus et al. (2021) proved that annotations harm learning in VR.
+6. A review covering 2010 to 2020 found 31 empirical studies that used VR as a testing apparatus.
+7. A review covering 2010 to 2020 found 52 empirical studies that used VR as a testing apparatus.
+8. VR simulators are valued for safe conduct of user studies and cost-effectiveness.
+9. VR simulators have perfect ecological validity.
+10. Wearable AR is a promising way to reduce crossing pedestrians' cognitive load when the design offers a clear signal to cross.
+11. Wearable AR eliminates cognitive load for all road users.
+12. A self-avatar may aid a participant's cognitive processes in immersive VR.
+13. Self-avatars always increase memory by 25 percent.
+14. The use of a self-avatar has important effects on presence and perception of space.
+15. Presence has no relationship with a self-avatar.
+16. Remote users often feel disconnected from the shared physical space.
+17. Remote users always prefer video calls to mixed reality.
+18. Young adults trust voice assistants more than visual assistants.
+19. Most users abandon AR headsets within one week.
+20. Haptic feedback is the strongest predictor of trust in MR companions (Chen, 2023).
+21. Eye tracking accuracy in consumer headsets exceeds 99 percent.
+22. Empathy in virtual agents lowers blood pressure.
+23. Hospitals in India adopted MR companions in 2022.
+24. Children learn navigation faster with AR than adults do.
+25. Battery life is the main barrier to AR adoption worldwide.
+26. Social isolation among students fell after MR use (Patel and Rao, 2020).
+27. Too much visual information can impair selection and organization processes.
+28. Text annotations in VR always reduce germane load.
+29. Pedestrians prefer AR over conventional push buttons in every scenario.
+30. Reviews of VR pedestrian studies value the flexibility of VR simulators in developing various traffic scenarios.

@@ -150,13 +150,13 @@
       "typeVersion": 1,
       "position": [
         -32,
-        -96
+        -304
       ],
       "parameters": {
         "content": "## Research Writer tools\nCalled by the Research Writer agent. Do not run this by hand.\n\n**ledger:** returns saved quotes. Read only, so the agent cannot add to the ledger.\n**search:** finds papers on OpenAlex.\n**verify:** checks that a reference exists.\n\nAnswers come from the database or the ledger, never from the AI.",
         "color": 4,
         "width": 464,
-        "height": 224
+        "height": 240
       }
     }
   ],

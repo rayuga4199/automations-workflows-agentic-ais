@@ -73,6 +73,16 @@ The form page shows the report. The same run produces:
 
 Real examples are in [sample-output/](sample-output/). All interview and note text there is made up. The page screenshots are [form-page.jpg](sample-output/form-page.jpg) and [report-page.jpg](sample-output/report-page.jpg).
 
+## Canvas
+The whole workflow, left to right. Open the stage images to read it at full size.
+
+![The full n8n canvas](screenshots/canvas-full.jpg)
+
+1. [Start and load the sources](screenshots/canvas-1-start-and-load-sources.jpg)
+2. [Anonymise, chunk and find the themes](screenshots/canvas-2-anonymise-and-find-themes.jpg)
+3. [Place every chunk in a theme](screenshots/canvas-3-place-chunks-in-themes.jpg)
+4. [Write the insights and show the report](screenshots/canvas-4-write-insights-and-report.jpg)
+
 ## Set it up
 Needs n8n 2.45.6 or later and a Groq account. The free tier was enough for the tests.
 1. Import `workflow.json` into n8n.
@@ -110,6 +120,5 @@ Measured on the sample: 14,228 to 15,980 tokens for 40 pieces, 10 or 11 AI calls
 - **Runs show as waiting if the page is closed.** A run stays in the Waiting state until the report page is opened.
 
 ## Status and roadmap
-Done: form, anonymisation, themes, placement, insights, report page, stress tests, sanitised export.
-Missing: a screenshot of the n8n canvas.
+Done: form, anonymisation, themes, placement, insights, report page, stress tests, sanitised export, canvas screenshots.
 Next, only if real use needs it: a test on one anonymised real transcript against the author's own coding, file upload, a form login, and an unknown-name check.

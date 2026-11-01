@@ -40,6 +40,7 @@ Author: Yash Bhagat, a design researcher. Built with Claude Code (an AI coding a
 - Do not say the memory is locked. It is separated by folder and by rule.
 - Do not say the models retrain or stay current by themselves. They search when they run.
 - Do not say it is a hosted app. It runs in Claude Code.
+- Do not present it as an n8n workflow. The main version is Claude Code. The n8n version is only a backup.
 - Do not invent user numbers, time saved or testimonials. None exist.
 
 ## Suggested page structure
@@ -52,8 +53,8 @@ Author: Yash Bhagat, a design researcher. Built with Claude Code (an AI coding a
 7. Limitations.
 
 ## Assets
-Available: `reports/tool-library/starter-page.jpg`, two full reports, a generated starter site, the Mermaid diagram.
-Missing: a demo video, a screenshot of a run. Do not reference them as if they exist.
+Available: `reports/tool-library/starter-page.jpg`, two full reports, a generated starter site, the Mermaid diagram, canvas images of the n8n backup in `n8n-backup/screenshots/`. Label those images as the backup, never as the main version.
+Missing: a demo video, a screenshot of a Claude Code run. Do not reference them as if they exist.
 
 ## Tone
 Plain, specific, first person singular or neutral. No hype words. Numbers always come with their caveat.

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" width="720" height="340" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <title id="t">Share of the review's 35 papers each route kept</title>
+  <desc id="d">Keyword search retrieved 17 percent, the keyword screener kept 74 percent, and the AI screener kept 14 percent. All are below the 80 percent target.</desc>
+  <style>
+    .surface { fill: #fcfcfb; }
+    .bar { fill: #2a78d6; }
+    .primary { fill: #0b0b0b; }
+    .secondary { fill: #52514e; }
+    .axis { stroke: #c9c8c2; stroke-width: 1; }
+    .target { stroke: #52514e; stroke-width: 1.5; stroke-dasharray: 4 4; }
+    @media (prefers-color-scheme: dark) {
+      .surface { fill: #1a1a19; }
+      .bar { fill: #3987e5; }
+      .primary { fill: #f0efec; }
+      .secondary { fill: #c3c2b7; }
+      .axis { stroke: #52514e; }
+      .target { stroke: #c3c2b7; }
+    }
+  </style>
+  <rect class="surface" width="720" height="340"/>
+  <text class="primary" x="24" y="36" font-size="18" font-weight="600">Share of the review's 35 papers each route kept</text>
+  <text class="secondary" x="24" y="60" font-size="13">No route reached the 80% target. Each route was measured once.</text>
+
+  <line class="axis" x1="260" y1="104" x2="260" y2="250"/>
+  <line class="target" x1="596" y1="96" x2="596" y2="250"/>
+  <text class="secondary" x="596" y="88" font-size="12" text-anchor="middle">Target 80%</text>
+
+  <text class="primary" x="248" y="125" font-size="13" text-anchor="end">Keyword search retrieved</text>
+  <path class="bar" d="M260 108h67.4a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4h-67.4z"><title>Keyword search retrieved 6 of 35 papers (17%)</title></path>
+  <text class="primary" x="340" y="125" font-size="13" font-weight="600">17% (6 of 35)</text>
+
+  <text class="primary" x="248" y="173" font-size="13" text-anchor="end">Keyword screener kept</text>
+  <path class="bar" d="M260 156h306.8a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4h-306.8z"><title>Keyword screener kept 26 of 35 papers (74%), counting maybe as kept</title></path>
+  <text class="primary" x="552" y="173" font-size="13" font-weight="600" fill="#ffffff" style="fill:#ffffff" text-anchor="end">74% (26 of 35)</text>
+
+  <text class="primary" x="248" y="221" font-size="13" text-anchor="end">AI screener kept</text>
+  <path class="bar" d="M260 204h54.8a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4h-54.8z"><title>AI screener kept 5 of 35 papers (14%) using the paper's written criteria</title></path>
+  <text class="primary" x="328" y="221" font-size="13" font-weight="600">14% (5 of 35)</text>
+
+  <text class="secondary" x="24" y="282" font-size="12">Keyword screener: "maybe" counts as kept, so this is a baseline and not a good result.</text>
+  <text class="secondary" x="24" y="302" font-size="12">AI screener: it followed the written criteria, which are narrower than the papers the review really included.</text>
+  <text class="secondary" x="24" y="322" font-size="12">Source: eval.md, runs on 2026-10-29. Screeners ran on a pool seeded with the 35 papers.</text>
+</svg>

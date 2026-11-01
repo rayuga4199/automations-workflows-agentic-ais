@@ -4,7 +4,7 @@
 
 An n8n workflow that helps a researcher run the **screening stage of a systematic literature review (SLR)**. It either searches for papers on a topic or takes a list the researcher already has, removes duplicates, screens every paper against written inclusion and exclusion criteria with a stated reason, counts the papers for a PRISMA flow diagram, and can fill a small facts table per paper. A token budget keeps AI cost under control. A human checks every result.
 
-**Status (2026-10-29):** the paper-side workflow is built, tested and exported (`workflow.json`). Not built: the Zotero push and the conference call-for-papers branch, even though the project name mentions conferences. Not yet done: no screenshot. See [Status and roadmap](#status-and-roadmap).
+**Status (2026-10-29):** the paper-side workflow is built, tested and exported (`workflow.json`). Not built: the Zotero push and the conference call-for-papers branch, even though the project name mentions conferences. See [Status and roadmap](#status-and-roadmap).
 
 Reading order for an AI agent or a reviewer: this file, then [PORTFOLIO_BRIEF.md](PORTFOLIO_BRIEF.md) (verified facts and safe claims), then [eval.md](eval.md) (measurements).
 
@@ -48,6 +48,17 @@ flowchart TD
 ```
 
 The workflow has a manual trigger only (it is not published or scheduled). The canvas carries plain-language sticky notes explaining each part.
+
+## Canvas
+The whole workflow with every group opened. Open the stage images to read it at full size.
+
+![The full n8n canvas](screenshots/canvas-full.jpg)
+
+1. [Start and inputs](screenshots/canvas-1-start-and-inputs.jpg)
+2. [Get the papers](screenshots/canvas-2-get-the-papers.jpg)
+3. [Screen the papers](screenshots/canvas-3-screen-the-papers.jpg)
+4. [Extract the facts](screenshots/canvas-4-extract-the-facts.jpg)
+5. [Count and the YES list](screenshots/canvas-5-count-and-yes-list.jpg)
 
 ## Node groups (45 nodes including 6 sticky notes)
 | Group | Nodes | Job |
@@ -112,6 +123,11 @@ Full detail and caveats in [eval.md](eval.md). All runs on one local n8n 2.45.6 
 
 The 80% recall target set at the start was **not met** and was replaced by the seeded-pool test, because searching cannot reach it. This is reported as found, not hidden.
 
+## Results at a glance
+![Share of the 35 papers each route kept](sample-output/results-chart.svg)
+
+The numbers and their caveats are in [eval.md](eval.md).
+
 ## How to run it
 Requirements: n8n (tested on 2.45.6, self-hosted in Docker). No other software.
 1. In n8n choose **Import from file** and select `workflow.json`.
@@ -134,7 +150,7 @@ Credentials needed (names only): `Groq account` (type `groqApi`), only when `use
 
 ## Status and roadmap
 Built and tested: both input modes, dedupe, caps, AI and keyword screening, PRISMA counts, extraction, sanitized export, fresh-import test.
-Not built: Zotero push with a human approval step (needs an account decision), the conference call-for-papers branch, parser auto-fix, `screenshot.png`, a drawn diagram image.
+Not built: Zotero push with a human approval step (needs an account decision), the conference call-for-papers branch, parser auto-fix, a drawn diagram image.
 Design decision: no vector database; it would be added only if `eval.md` showed it improves recall.
 
 ## Files in this folder

@@ -67,8 +67,8 @@ An n8n workflow that screens research papers for a systematic literature review,
 8. Link to the repo and `workflow.json`.
 
 ## Assets
-Available: `workflow.json`, Mermaid diagram in `README.md`, sample inputs and outputs, `eval.md`.
-Missing: a canvas screenshot (`screenshot.png`), a drawn diagram image, a demo video. Do not reference them as if they exist.
+Available: `workflow.json`, Mermaid diagram in `README.md`, `sample-output/results-chart.svg`, `screenshots/canvas-full.jpg` and five stage images of the n8n canvas, sample inputs and outputs, `eval.md`.
+Missing: a drawn diagram image, a demo video. Do not reference them as if they exist.
 
 ## Tone
 Plain, specific, first person singular or neutral. No hype words. Numbers always come with their caveat. British or Indian English spelling is fine; keep the author's own spelling of "normalise/normalize" consistent within a page.
