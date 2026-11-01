@@ -48,3 +48,4 @@ Exit code 0 means no leaks. Non-zero means a finding: rotate the secret first, t
 | 2026-10-29 | `gitleaks dir --redact .` after docs rewrite, samples and re-export | see commit log |
 | 2026-10-30 | `gitleaks dir --redact .` and full-history `gitleaks git` before adding the Insight Synthesis Engine | see commit log |
 | 2026-10-30 | `gitleaks dir --redact .` and full-history `gitleaks git` before adding the Design Team | see commit log |
+| 2026-11-01 | `gitleaks dir` and full-history `gitleaks git` before the license commit, plus a search for personal strings and credential ids | no leaks found |
